@@ -1,6 +1,7 @@
 ## Current
 
 ### Features
+- [#2667](https://github.com/poanetwork/blockscout/pull/2667) - Add ETS-based cache for accounts page
 - [#2588](https://github.com/poanetwork/blockscout/pull/2588) - add verification submission comment
 - [#2505](https://github.com/poanetwork/blockscout/pull/2505) - support POA Network emission rewards
 - [#2636](https://github.com/poanetwork/blockscout/pull/2636) - Execute all address' transactions page queries in parallel
