@@ -7,6 +7,7 @@
 - [#2667](https://github.com/poanetwork/blockscout/pull/2667) - Add ETS-based cache for accounts page
 - [#2665](https://github.com/poanetwork/blockscout/pull/2665) - new menu layout for mobile devices
 - [#2663](https://github.com/poanetwork/blockscout/pull/2663) - Fetch address counters in parallel
+- [#2642](https://github.com/poanetwork/blockscout/pull/2642) - add ERC721 coin instance page
 - [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
 
 ### Fixes
