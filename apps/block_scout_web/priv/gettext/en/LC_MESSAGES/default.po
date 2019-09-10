@@ -302,8 +302,10 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/address/_validator_metadata_modal.html.eex:37
-#: lib/block_scout_web/templates/address/overview.html.eex:145
-#: lib/block_scout_web/templates/address/overview.html.eex:153
+#: lib/block_scout_web/templates/address/overview.html.eex:143
+#: lib/block_scout_web/templates/address/overview.html.eex:151
+#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:105
+#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:113
 #: lib/block_scout_web/templates/tokens/overview/_details.html.eex:110
 #: lib/block_scout_web/templates/tokens/overview/_details.html.eex:118
 msgid "Close"
@@ -526,6 +528,7 @@ msgid "Data"
 msgstr ""
 
 #, elixir-format
+#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:62
 #: lib/block_scout_web/templates/tokens/overview/_details.html.eex:67
 msgid "Decimals"
 msgstr ""
@@ -1248,7 +1251,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/address/overview.html.eex:33
-#: lib/block_scout_web/templates/address/overview.html.eex:144
+#: lib/block_scout_web/templates/address/overview.html.eex:142
 #: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:36
 #: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:104
 #: lib/block_scout_web/templates/tokens/overview/_details.html.eex:36
@@ -1532,6 +1535,7 @@ msgid "Topics"
 msgstr ""
 
 #, elixir-format
+#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:74
 #: lib/block_scout_web/templates/tokens/overview/_details.html.eex:79
 msgid "Total Supply"
 msgstr ""
@@ -1589,6 +1593,7 @@ msgid "Transactions sent"
 msgstr ""
 
 #, elixir-format
+#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:60
 #: lib/block_scout_web/templates/tokens/overview/_details.html.eex:64
 msgid "Transfers"
 msgstr ""
@@ -1830,11 +1835,6 @@ msgstr ""
 #, elixir-format
 #: lib/block_scout_web/templates/transaction/overview.html.eex:232
 msgid "Gas"
-msgstr ""
-
-#, elixir-format
-#: lib/block_scout_web/templates/layout/_footer.html.eex:19
-msgid "Github"
 msgstr ""
 
 #, elixir-format
