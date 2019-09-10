@@ -6,11 +6,13 @@
 - [#2678](https://github.com/poanetwork/blockscout/pull/2678) - fixed dashboard banner height bug
 - [#2672](https://github.com/poanetwork/blockscout/pull/2672) - added new theme for xUSDT
 - [#2663](https://github.com/poanetwork/blockscout/pull/2663) - Fetch address counters in parallel
+- [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
 
 ### Fixes
 - [#2684](https://github.com/poanetwork/blockscout/pull/2684) - do not filter pending logs
 - [#2682](https://github.com/poanetwork/blockscout/pull/2682) - Use Task.start instead of Task.async in caches
-- [#2671](https://github.com/poanetwork/blockscout/pull/2671) - fixed buttons color at smart contract section 
+- [#2671](https://github.com/poanetwork/blockscout/pull/2671) - fixed buttons color at smart contract section
+
 ### Chore
 
 
