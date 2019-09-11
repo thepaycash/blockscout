@@ -59,8 +59,10 @@ defmodule Explorer.Chain.Cache.Accounts do
         {:ok, []}
       end)
     else
-      # update the cache as usual
-      update(addresses)
+      # filter addresses without fetched_coin_balance and update the cache as usual
+      addresses
+      |> Enum.filter(&(not is_nil(&1.fetched_coin_balance) and &1.fetched_coin_balance > 0))
+      |> update()
     end
   end
 end
