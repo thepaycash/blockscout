@@ -1,6 +1,7 @@
 ## Current
 
 ### Features
+- [#2699](https://github.com/poanetwork/blockscout/pull/2699) - Add temporary indexer to trigger refetching of blocks with missing token transfers
 - [#2679](https://github.com/poanetwork/blockscout/pull/2679) - added fixed height for card chain blocks and card chain transactions
 - [#2678](https://github.com/poanetwork/blockscout/pull/2678) - fixed dashboard banner height bug
 - [#2672](https://github.com/poanetwork/blockscout/pull/2672) - added new theme for xUSDT
