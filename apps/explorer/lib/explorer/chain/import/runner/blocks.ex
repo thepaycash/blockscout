@@ -59,17 +59,23 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
     |> Multi.run(:lose_invalid_neighbour_consensus, fn repo, _ ->
       lose_invalid_neighbour_consensus(repo, where_invalid_neighbour, insert_options)
     end)
-    |> Multi.run(:nonconsensus_block_numbers, fn _repo,
+    |> Multi.run(:remove_nonconsensus_data, fn _repo,
                                                  %{
                                                    lose_consensus: lost_consensus_blocks,
-                                                   lose_invalid_neighbour_consensus: lost_consensus_neighbours
-                                                 } ->
+                                                   lose_invalid_neighbour_consensus: lost_consensus_neighbours,
+                                                   fork_transactions: transactions 
+                                                } ->
       nonconsensus_block_numbers =
         (lost_consensus_blocks ++ lost_consensus_neighbours)
         |> Enum.sort()
         |> Enum.dedup()
 
-      {:ok, nonconsensus_block_numbers}
+      remove_nonconsensus_data(
+        _repo,
+        nonconsensus_block_numbers,
+        transactions,
+        insert_options
+      )
     end)
     |> Multi.run(:blocks, fn repo, _ ->
       insert(repo, changes_list, insert_options)
@@ -101,22 +107,11 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
         transactions: transactions
       })
     end)
-    |> Multi.run(:remove_nonconsensus_logs, fn repo,
-                                               %{
-                                                 nonconsensus_block_numbers: nonconsensus_block_numbers,
-                                                 fork_transactions: transactions
-                                               } ->
-      remove_nonconsensus_logs(repo, nonconsensus_block_numbers, transactions, insert_options)
-    end)
     |> Multi.run(:internal_transaction_transaction_block_number, fn repo, %{blocks: blocks} when is_list(blocks) ->
       update_internal_transaction_block_number(repo, hashes)
     end)
     |> Multi.run(:acquire_contract_address_tokens, fn repo, _ ->
       acquire_contract_address_tokens(repo, consensus_block_numbers)
-    end)
-    |> Multi.run(:remove_nonconsensus_token_transfers, fn repo,
-                                                          %{nonconsensus_block_numbers: nonconsensus_block_numbers} ->
-      remove_nonconsensus_token_transfers(repo, nonconsensus_block_numbers, insert_options)
     end)
     |> Multi.run(:delete_address_token_balances, fn repo, _ ->
       delete_address_token_balances(repo, consensus_block_numbers, insert_options)
@@ -356,24 +351,21 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
         timeout: timeout
       )
 
-    try do
-      {_, result} = repo.update_all(query, [], timeout: timeout)
-
-      {:ok, result}
-    rescue
-      postgrex_error in Postgrex.Error ->
-        {:error, %{exception: postgrex_error, where_invalid_neighbour: where_invalid_neighbour}}
-    end
+    {:ok, result}
+  rescue
+    postgrex_error in Postgrex.Error ->
+      {:error, %{exception: postgrex_error, where_invalid_neighbour: where_invalid_neighbour}}
   end
 
   defp remove_nonconsensus_data(
          repo,
          nonconsensus_block_numbers,
+         forked_transactions,
          insert_options
        ) do
     with {:ok, deleted_token_transfers} <-
            remove_nonconsensus_token_transfers(repo, nonconsensus_block_numbers, insert_options),
-         {:ok, deleted_logs} <- remove_nonconsensus_logs(repo, nonconsensus_block_numbers, insert_options),
+         {:ok, deleted_logs} <- remove_nonconsensus_logs(repo, nonconsensus_block_numbers, forked_transactions, insert_options),
          {:ok, deleted_internal_transactions} <-
            remove_nonconsensus_internal_transactions(repo, nonconsensus_block_numbers, insert_options) do
       {:ok,
@@ -458,7 +450,9 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
     end
   end
 
-  defp remove_nonconsensus_logs(repo, nonconsensus_block_numbers, %{timeout: timeout}) do
+  defp remove_nonconsensus_logs(repo, nonconsensus_block_numbers, forked_transactions, %{timeout: timeout}) do
+    forked_transaction_hashes = Enum.map(forked_transactions, & &1.hash)
+
     transaction_query =
       from(transaction in Transaction,
         where: transaction.block_number in ^nonconsensus_block_numbers,
