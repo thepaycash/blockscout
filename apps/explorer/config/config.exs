@@ -140,6 +140,22 @@ config :explorer, Explorer.Chain.Cache.Accounts,
   ttl_check_interval: if(System.get_env("DISABLE_INDEXER") == "true", do: :timer.seconds(1), else: false),
   global_ttl: if(System.get_env("DISABLE_INDEXER") == "true", do: :timer.seconds(5))
 
+double_token_transfers_start =
+  case Integer.parse(System.get_env("DOUBLE_TOKEN_TRANSFERS_START", "")) do
+    {number, ""} -> number
+    _ -> nil
+  end
+
+double_token_transfers_end =
+  case Integer.parse(System.get_env("DOUBLE_TOKEN_TRANSFERS_END", "")) do
+    {number, ""} -> number
+    _ -> nil
+  end
+
+config :explorer, :double_token_transfers,
+  first_block_number: double_token_transfers_start,
+  last_block_number: double_token_transfers_end
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

@@ -69,3 +69,5 @@ $ export NETWORK=POA
 | `EMISSION_FORMAT` | | Should be set to `POA` if you have block emission indentical to POA Network. This env var is used only if `CHAIN_SPEC_PATH` is set | `STANDARD` | v2.0.4+ | | |
 | `REWARDS_CONTRACT_ADDRESS` | | Emission rewards contract address. This env var is used only if `EMISSION_FORMAT` is set to `POA` | `0xeca443e8e1ab29971a45a9c57a6a9875701698a5` | v2.0.4+ | | |
 | `MAX_SKIPPING_DISTANCE` | | The maximum distance the indexer is allowed to wait for when notified of a number not following the lask known one. | 4 | master |
+| `DOUBLE_TOKEN_TRANSFERS_START` | | The block number that the `:double_token_transfers` refercher has to start checking from (exclusive). If `nil` it will start from the beginning. | `nil` | v2.0.4+ | | |
+| `DOUBLE_TOKEN_TRANSFERS_END` | | The block number that the `:double_token_transfers` refercher has to stop checking to (inclusive). If `nil` it will never stop | `nil` | v2.0.4+ | | |

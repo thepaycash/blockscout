@@ -111,6 +111,7 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
     |> Multi.run(:remove_nonconsensus_internal_transactions, fn repo,
                                                           %{nonconsensus_block_numbers: nonconsensus_block_numbers} ->
       remove_nonconsensus_internal_transactions(repo, nonconsensus_block_numbers, insert_options)
+    end)
     |> Multi.run(:internal_transaction_transaction_block_number, fn repo, %{blocks: blocks} when is_list(blocks) ->
       update_internal_transaction_block_number(repo, hashes)
     end)
