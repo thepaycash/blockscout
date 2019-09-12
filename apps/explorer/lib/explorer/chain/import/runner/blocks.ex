@@ -59,23 +59,17 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
     |> Multi.run(:lose_invalid_neighbour_consensus, fn repo, _ ->
       lose_invalid_neighbour_consensus(repo, where_invalid_neighbour, insert_options)
     end)
-    |> Multi.run(:remove_nonconsensus_data, fn _repo,
+    |> Multi.run(:nonconsensus_block_numbers, fn _repo,
                                                  %{
                                                    lose_consensus: lost_consensus_blocks,
-                                                   lose_invalid_neighbour_consensus: lost_consensus_neighbours,
-                                                   fork_transactions: transactions 
-                                                } ->
+                                                   lose_invalid_neighbour_consensus: lost_consensus_neighbours
+                                                 } ->
       nonconsensus_block_numbers =
         (lost_consensus_blocks ++ lost_consensus_neighbours)
         |> Enum.sort()
         |> Enum.dedup()
 
-      remove_nonconsensus_data(
-        _repo,
-        nonconsensus_block_numbers,
-        transactions,
-        insert_options
-      )
+      {:ok, nonconsensus_block_numbers}
     end)
     |> Multi.run(:blocks, fn repo, _ ->
       insert(repo, changes_list, insert_options)
@@ -107,11 +101,25 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
         transactions: transactions
       })
     end)
+    |> Multi.run(:remove_nonconsensus_logs, fn repo,
+                                               %{
+                                                 nonconsensus_block_numbers: nonconsensus_block_numbers,
+                                                 fork_transactions: transactions
+                                               } ->
+      remove_nonconsensus_logs(repo, nonconsensus_block_numbers, transactions, insert_options)
+    end)
+    |> Multi.run(:remove_nonconsensus_internal_transactions, fn repo,
+                                                          %{nonconsensus_block_numbers: nonconsensus_block_numbers} ->
+      remove_nonconsensus_internal_transactions(repo, nonconsensus_block_numbers, insert_options)
     |> Multi.run(:internal_transaction_transaction_block_number, fn repo, %{blocks: blocks} when is_list(blocks) ->
       update_internal_transaction_block_number(repo, hashes)
     end)
     |> Multi.run(:acquire_contract_address_tokens, fn repo, _ ->
       acquire_contract_address_tokens(repo, consensus_block_numbers)
+    end)
+    |> Multi.run(:remove_nonconsensus_token_transfers, fn repo,
+                                                          %{nonconsensus_block_numbers: nonconsensus_block_numbers} ->
+      remove_nonconsensus_token_transfers(repo, nonconsensus_block_numbers, insert_options)
     end)
     |> Multi.run(:delete_address_token_balances, fn repo, _ ->
       delete_address_token_balances(repo, consensus_block_numbers, insert_options)
@@ -357,26 +365,6 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
       {:error, %{exception: postgrex_error, where_invalid_neighbour: where_invalid_neighbour}}
   end
 
-  defp remove_nonconsensus_data(
-         repo,
-         nonconsensus_block_numbers,
-         forked_transactions,
-         insert_options
-       ) do
-    with {:ok, deleted_token_transfers} <-
-           remove_nonconsensus_token_transfers(repo, nonconsensus_block_numbers, insert_options),
-         {:ok, deleted_logs} <- remove_nonconsensus_logs(repo, nonconsensus_block_numbers, forked_transactions, insert_options),
-         {:ok, deleted_internal_transactions} <-
-           remove_nonconsensus_internal_transactions(repo, nonconsensus_block_numbers, insert_options) do
-      {:ok,
-       %{
-         token_transfers: deleted_token_transfers,
-         logs: deleted_logs,
-         internal_transactions: deleted_internal_transactions
-       }}
-    end
-  end
-
   defp remove_nonconsensus_token_transfers(repo, nonconsensus_block_numbers, %{timeout: timeout}) do
     ordered_token_transfers =
       from(token_transfer in TokenTransfer,
@@ -423,7 +411,7 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
         inner_join: transaction in subquery(transaction_query),
         on: internal_transaction.transaction_hash == transaction.hash,
         select: map(internal_transaction, [:transaction_hash, :index]),
-        # Enforce Log ShareLocks order (see docs: sharelocks.md)
+        # Enforce InternalTransaction ShareLocks order (see docs: sharelocks.md)
         order_by: [
           internal_transaction.transaction_hash,
           internal_transaction.index
