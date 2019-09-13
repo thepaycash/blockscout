@@ -23,7 +23,7 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
 
   @defaults [
     flush_interval: :timer.seconds(3),
-    max_batch_size: 50,
+    max_batch_size: 1,
     max_concurrency: 1,
     task_supervisor: Indexer.Temporary.DoubleTokenTransfers.TaskSupervisor,
     metadata: [fetcher: @fetcher_name]
@@ -47,26 +47,17 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
     if BlockRefetcher.no_work_left(first, last) do
       {0, []}
     else
-      transfers_query =
+      starting_query =
         from(
-          t in TokenTransfer,
-          group_by: [t.transaction_hash],
-          having: count() > 1,
-          select: t.transaction_hash
-        )
-
-      transactions_query =
-        from(
-          t in Transaction,
-          join: s in subquery(transfers_query),
-          on: t.hash == s.transaction_hash,
+          b in Block,
+          # goes from latest to newest
+          order_by: [desc: b.number],
           distinct: true,
-          select: t.block_number,
-          order_by: [asc: t.block_number]
+          select: b.number
         )
 
       query =
-        transactions_query
+        starting_query
         |> where_first_block_number(first)
         |> where_last_block_number(last)
 
@@ -77,7 +68,7 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
   end
 
   @impl BufferedTask
-  def run(numbers, _) do
+  def run([number], _) do
     # Enforce ShareLocks tables order (see docs: sharelocks.md)
     multi =
       Multi.new()
@@ -85,72 +76,105 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
         query =
           from(
             t in Transaction,
-            where: t.block_number in ^numbers,
+            where: t.block_number == ^number,
             select: t.hash
           )
 
         {:ok, repo.all(query)}
       end)
-      |> Multi.run(:remove_blocks_consensus, fn repo, _ ->
-        query =
-          from(
-            block in Block,
-            where: block.number in ^numbers,
-            # Enforce Block ShareLocks order (see docs: sharelocks.md)
-            order_by: [asc: block.hash],
-            lock: "FOR UPDATE"
-          )
+      |> Multi.run(:needs_reindexing, fn repo, %{transaction_hashes: hashes} ->
+        if Enum.empty?(hashes) do
+          {:ok, false}
+        else
+          # checks if among the transactions there is at least one with multiple
+          # token_transfers
+          query =
+            from(
+              tt in TokenTransfer,
+              where:
+                tt.transaction_hash in ^hashes and
+                  fragment(
+                    """
+                    EXISTS (SELECT 1
+                    FROM token_transfers AS other_transfer
+                    WHERE other_transfer.transaction_hash = ?
+                    AND other_transfer.log_index <> ?
+                    )
+                    """,
+                    tt.transaction_hash,
+                    tt.log_index
+                  ),
+              select: %{result: 1}
+            )
 
-        {_num, result} =
-          repo.update_all(
-            from(b in Block, join: s in subquery(query), on: b.hash == s.hash),
-            set: [consensus: false]
-          )
-
-        {:ok, result}
+          {:ok, repo.exists?(query)}
+        end
       end)
-      |> Multi.run(:remove_logs, fn repo, %{transaction_hashes: hashes} ->
-        query =
-          from(
-            log in Log,
-            where: log.transaction_hash in ^hashes,
-            # Enforce Log ShareLocks order (see docs: sharelocks.md)
-            order_by: [asc: log.transaction_hash, asc: log.index],
-            lock: "FOR UPDATE"
-          )
+      |> Multi.run(:remove_blocks_consensus, fn repo, %{needs_reindexing: needs_reindexing} ->
+        with {:ok, true} <- {:ok, needs_reindexing} do
+          query =
+            from(
+              block in Block,
+              where: block.number == ^number,
+              # Enforce Block ShareLocks order (see docs: sharelocks.md)
+              order_by: [asc: block.hash],
+              lock: "FOR UPDATE"
+            )
 
-        {_num, result} =
-          repo.delete_all(from(l in Log, join: s in subquery(query), on: l.transaction_hash == s.transaction_hash))
+          {_num, result} =
+            repo.update_all(
+              from(b in Block, join: s in subquery(query), on: b.hash == s.hash),
+              set: [consensus: false]
+            )
 
-        {:ok, result}
+          {:ok, result}
+        end
       end)
-      |> Multi.run(:remove_token_transfers, fn repo, %{transaction_hashes: hashes} ->
-        query =
-          from(
-            transfer in TokenTransfer,
-            where: transfer.transaction_hash in ^hashes,
-            # Enforce TokenTransfer ShareLocks order (see docs: sharelocks.md)
-            order_by: [asc: transfer.transaction_hash, asc: transfer.log_index],
-            lock: "FOR UPDATE"
-          )
+      |> Multi.run(:remove_logs, fn repo, %{needs_reindexing: needs_reindexing, transaction_hashes: hashes} ->
+        with {:ok, true} <- {:ok, needs_reindexing} do
+          query =
+            from(
+              log in Log,
+              where: log.transaction_hash in ^hashes,
+              # Enforce Log ShareLocks order (see docs: sharelocks.md)
+              order_by: [asc: log.transaction_hash, asc: log.index],
+              lock: "FOR UPDATE"
+            )
 
-        {_num, result} =
-          repo.delete_all(
-            from(tt in TokenTransfer, join: s in subquery(query), on: tt.transaction_hash == s.transaction_hash)
-          )
+          {_num, result} =
+            repo.delete_all(from(l in Log, join: s in subquery(query), on: l.transaction_hash == s.transaction_hash))
 
-        {:ok, result}
+          {:ok, result}
+        end
+      end)
+      |> Multi.run(:remove_token_transfers, fn repo,
+                                               %{needs_reindexing: needs_reindexing, transaction_hashes: hashes} ->
+        with {:ok, true} <- {:ok, needs_reindexing} do
+          query =
+            from(
+              transfer in TokenTransfer,
+              where: transfer.transaction_hash in ^hashes,
+              # Enforce TokenTransfer ShareLocks order (see docs: sharelocks.md)
+              order_by: [asc: transfer.transaction_hash, asc: transfer.log_index],
+              lock: "FOR UPDATE"
+            )
+
+          {_num, result} =
+            repo.delete_all(
+              from(tt in TokenTransfer, join: s in subquery(query), on: tt.transaction_hash == s.transaction_hash)
+            )
+
+          {:ok, result}
+        end
       end)
       |> Multi.run(:update_refetcher_status, fn repo, _ ->
-        new_first = Enum.max(numbers)
-
         @fetcher_name
         |> BlockRefetcher.fetch()
-        |> repo.one()
-        |> BlockRefetcher.with_first(new_first)
-        |> repo.update()
+        |> repo.one!()
+        |> BlockRefetcher.with_last(number)
+        |> repo.update!()
 
-        {:ok, new_first}
+        {:ok, number}
       end)
 
     try do
@@ -160,13 +184,14 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
         {:ok, _res} ->
           :ok
 
-        {:error, _error} ->
-          {:retry, numbers}
+        {:error, error} ->
+          Logger.error(fn -> ["Error while handling double token transfers", inspect(error)] end)
+          {:retry, [number]}
       end
     rescue
       postgrex_error in Postgrex.Error ->
         Logger.error(fn -> ["Error while handling double token transfers", inspect(postgrex_error)] end)
-        {:retry, numbers}
+        {:retry, [number]}
     end
   end
 
