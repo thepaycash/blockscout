@@ -213,12 +213,12 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
   defp where_first_block_number(query, number) when is_nil(number), do: query
 
   defp where_first_block_number(query, number) do
-    where(query, [t], t.block_number > ^number)
+    where(query, [b], b.number > ^number)
   end
 
   defp where_last_block_number(query, number) when is_nil(number), do: query
 
   defp where_last_block_number(query, number) do
-    where(query, [t], t.block_number <= ^number)
+    where(query, [b], b.number <= ^number)
   end
 end
