@@ -74,7 +74,7 @@ defmodule Indexer.Fetcher.CoinBalanceOnDemand do
     result = fetch_and_update(block_number, address, state.json_rpc_named_arguments)
 
     with {:ok, %{addresses: addresses}} <- result do
-      Accounts.drop_or_update(addresses)
+      Accounts.drop(addresses)
     end
 
     {:noreply, state}

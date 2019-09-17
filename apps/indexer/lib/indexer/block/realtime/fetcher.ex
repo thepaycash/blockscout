@@ -204,7 +204,7 @@ defmodule Indexer.Block.Realtime.Fetcher do
         json_rpc_named_arguments
       )
 
-      Accounts.drop_or_update(imported[:addresses])
+      Accounts.drop(imported[:addresses])
 
       ok
     end

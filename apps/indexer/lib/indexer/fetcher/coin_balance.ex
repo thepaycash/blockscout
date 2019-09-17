@@ -139,7 +139,7 @@ defmodule Indexer.Fetcher.CoinBalance do
   defp run_fetched_balances(%FetchedBalances{errors: errors} = fetched_balances, _) do
     {:ok, imported} = import_fetched_balances(fetched_balances)
 
-    Accounts.drop_or_update(imported[:addresses])
+    Accounts.drop(imported[:addresses])
 
     retry(errors)
   end

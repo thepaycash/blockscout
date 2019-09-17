@@ -132,7 +132,7 @@ defmodule Indexer.Fetcher.BlockReward do
         |> import_block_reward_params()
         |> case do
           {:ok, %{address_coin_balances: address_coin_balances, addresses: addresses}} ->
-            Accounts.drop_or_update(addresses)
+            Accounts.drop(addresses)
 
             CoinBalance.async_fetch_balances(address_coin_balances)
 

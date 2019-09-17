@@ -198,7 +198,7 @@ defmodule Indexer.Block.Fetcher do
     Transactions.update(transactions)
   end
 
-  defp update_addresses_cache(addresses), do: Accounts.drop_or_update(addresses)
+  defp update_addresses_cache(addresses), do: Accounts.drop(addresses)
 
   def import(
         %__MODULE__{broadcast: broadcast, callback_module: callback_module} = state,

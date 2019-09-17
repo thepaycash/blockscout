@@ -219,7 +219,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
 
     case imports do
       {:ok, imported} ->
-        Accounts.drop_or_update(imported[:addreses])
+        Accounts.drop(imported[:addreses])
 
         async_import_coin_balances(imported, %{
           address_hash_to_fetched_balance_block_number: address_hash_to_block_number

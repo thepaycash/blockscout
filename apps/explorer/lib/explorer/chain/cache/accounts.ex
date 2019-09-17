@@ -29,40 +29,45 @@ defmodule Explorer.Chain.Cache.Accounts do
     end
   end
 
-  def drop_or_update(nil), do: :ok
+  def drop(nil), do: :ok
 
-  def drop_or_update([]), do: :ok
+  def drop([]), do: :ok
 
-  def drop_or_update(addresses) do
-    # Note: because the fetched_coin_balance of each address may change constantly,
-    # we cannot just let the Indexer `update` the cache.
-    # The reason being that if an address coin balance update drops, we have no
-    # way of knowing if it should stay in the cache or if there is another address in the
-    # database that should take its place.
+  def drop(addresses) when is_list(addresses) do
+    # This has to be used by the Indexer insead of `update`.
+    # The reason being that addresses already in the cache can change their balance
+    # value and removing or updating them will result into a potentially invalid
+    # cache status, that would not even get corrected with time.
     # The only thing we can safely do when an address in the cache changes its
     # `fetched_coin_balance` is to invalidate the whole cache and wait for it
-    # to be filled again.
-    ids_map = Map.new(ids_list(), fn {balance, hash} -> {hash, balance} end)
-
-    drop_needed =
-      Enum.find_value(addresses, false, fn address ->
-        stored_address_balance = Map.get(ids_map, address.hash)
-
-        not is_nil(stored_address_balance) and stored_address_balance != address.fetched_coin_balance
-      end)
-
-    if drop_needed do
-      ConCache.update(cache_name(), ids_list_key(), fn ids ->
+    # to be filled again (by the query that it takes the place of when full).
+    ConCache.update(cache_name(), ids_list_key(), fn ids ->
+      if drop_needed?(ids, addresses) do
         # Remove the addresses immediately
         Enum.each(ids, &ConCache.delete(cache_name(), &1))
 
         {:ok, []}
-      end)
-    else
-      # filter addresses without fetched_coin_balance and update the cache as usual
-      addresses
-      |> Enum.filter(&(not is_nil(&1.fetched_coin_balance) and &1.fetched_coin_balance > 0))
-      |> update()
-    end
+      else
+        {:ok, ids}
+      end
+    end)
+  end
+
+  def drop(address), do: drop([address])
+
+  defp drop_needed?(ids, _addresses) when is_nil(ids), do: false
+
+  defp drop_needed?([], _addresses), do: false
+
+  defp drop_needed?(ids, addresses) do
+    ids_map = Map.new(ids, fn {balance, hash} -> {hash, balance} end)
+
+    # Result it `true` only when the address is present in the cache already,
+    # but with a different `fetched_coin_balance`
+    Enum.find_value(addresses, false, fn address ->
+      stored_address_balance = Map.get(ids_map, address.hash)
+
+      stored_address_balance && stored_address_balance != address.fetched_coin_balance
+    end)
   end
 end

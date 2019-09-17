@@ -128,7 +128,7 @@ defmodule Indexer.Fetcher.ContractCode do
                timeout: :infinity
              }) do
           {:ok, imported} ->
-            Accounts.drop_or_update(imported[:addresses])
+            Accounts.drop(imported[:addresses])
             :ok
 
           {:error, step, reason, _changes_so_far} ->

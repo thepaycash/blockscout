@@ -150,7 +150,7 @@ defmodule Indexer.Fetcher.PendingTransaction do
            transactions: %{params: transactions_params, on_conflict: :nothing}
          }) do
       {:ok, imported} ->
-        Accounts.drop_or_update(imported[:addresses])
+        Accounts.drop(imported[:addresses])
         :ok
 
       {:error, [%Changeset{} | _] = changesets} ->
