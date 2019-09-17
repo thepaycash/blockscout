@@ -14,6 +14,7 @@
 
 ### Fixes
 - [#2701](https://github.com/poanetwork/blockscout/pull/2701) - Exclude nonconsensus blocks from avg block time calculation by default
+- [#2696](https://github.com/poanetwork/blockscout/pull/2696) - do not update fetched_coin_balance with nil
 - [#2693](https://github.com/poanetwork/blockscout/pull/2693) - remove non consensus internal transactions
 - [#2691](https://github.com/poanetwork/blockscout/pull/2691) - fix exchange rate websocket update for Rootstock
 - [#2688](https://github.com/poanetwork/blockscout/pull/2688) - fix try it out section
