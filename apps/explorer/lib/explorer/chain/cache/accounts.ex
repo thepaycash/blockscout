@@ -55,6 +55,8 @@ defmodule Explorer.Chain.Cache.Accounts do
 
   def drop(address), do: drop([address])
 
+  defp drop_needed?(ids, _addresses) when is_nil(ids), do: false
+
   defp drop_needed?([], _addresses), do: false
 
   defp drop_needed?(ids, addresses) do
