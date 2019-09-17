@@ -6,6 +6,8 @@ defmodule BlockScoutWeb.Tokens.Instance.OverviewView do
 
   import BlockScoutWeb.APIDocsView, only: [blockscout_url: 0]
 
+  @tabs ["token_transfers", "metadata"]
+
   def token_name?(%Token{name: nil}), do: false
   def token_name?(%Token{name: _}), do: true
 
@@ -14,6 +16,16 @@ defmodule BlockScoutWeb.Tokens.Instance.OverviewView do
 
   def total_supply?(%Token{total_supply: nil}), do: false
   def total_supply?(%Token{total_supply: _}), do: true
+
+  def image_src(nil), do: "/images/ether1_logo.svg"
+
+  def image_src(instance) do
+    if instance.metadata && instance.metadata["image"] do
+      instance.metadata["image"]
+    else
+      image_src(nil)
+    end
+  end
 
   def total_supply_usd(token) do
     tokens = CurrencyHelpers.divide_decimals(token.total_supply, token.decimals)
@@ -30,12 +42,21 @@ defmodule BlockScoutWeb.Tokens.Instance.OverviewView do
   def smart_contract_with_read_only_functions?(%Token{contract_address: %Address{smart_contract: nil}}), do: false
 
   def qr_code(conn, token_id, hash) do
-    token_instance_path = token_instance_path(conn, :show, to_string(token_id), to_string(hash))
+    token_instance_path = token_instance_path(conn, :show, to_string(hash), to_string(token_id))
 
-    url = blockscout_url() <> token_instance_path
+    url = Path.join(blockscout_url(), token_instance_path)
 
     url
     |> QRCode.to_png()
     |> Base.encode64()
   end
+
+  def current_tab_name(request_path) do
+    @tabs
+    |> Enum.filter(&tab_active?(&1, request_path))
+    |> tab_name()
+  end
+
+  defp tab_name(["token_transfers"]), do: gettext("Token Transfers")
+  defp tab_name(["metadata"]), do: gettext("Metadata")
 end
