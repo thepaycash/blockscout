@@ -1,29 +1,21 @@
 defmodule Indexer.Temporary.DoubleTokenTransfersTest do
   use Explorer.DataCase
 
-  alias Explorer.BlockRefetcher
   alias Explorer.Chain.{Block, Log, TokenTransfer}
   alias Indexer.Temporary.DoubleTokenTransfers
 
-  @fetcher_name :double_token_transfers
-
   describe "run/2" do
     setup do
-      # clear the data from the database
-      @fetcher_name
-      |> BlockRefetcher.fetch()
-      |> Repo.one()
-      |> case do
-        nil -> %BlockRefetcher{name: Atom.to_string(@fetcher_name)}
-        refetcher -> refetcher
-      end
-      |> BlockRefetcher.changeset(%{first_block_number: nil, last_block_number: nil})
-      |> Repo.insert_or_update()
+      # we need to know that the table exists or the DB transactions will fail
+      Ecto.Adapters.SQL.query!(
+        Repo,
+        "CREATE TABLE IF NOT EXISTS blocks_to_invalidate_doubled_tt (block_number integer, refetched boolean);"
+      )
 
       :ok
     end
 
-    test "removes consensus from blocks with multiple token_transfers" do
+    test "removes consensus from blocks" do
       block = insert(:block)
       transaction = insert(:transaction) |> with_block(block)
       insert(:token_transfer, transaction: transaction)
@@ -36,7 +28,7 @@ defmodule Indexer.Temporary.DoubleTokenTransfersTest do
       assert %{consensus: false} = from(b in Block, where: b.number == ^block_number) |> Repo.one()
     end
 
-    test "deletes logs from transactions of blocks with multiple token_transfers" do
+    test "deletes logs from transactions of blocks" do
       block = insert(:block)
       transaction = insert(:transaction) |> with_block(block)
       insert(:token_transfer, transaction: transaction)
@@ -58,7 +50,7 @@ defmodule Indexer.Temporary.DoubleTokenTransfersTest do
                |> Repo.aggregate(:count, :transaction_hash)
     end
 
-    test "deletes token_transfers from transactions of blocks with multiple token_transfers" do
+    test "deletes token_transfers from transactions of blocks" do
       block = insert(:block)
       transaction = insert(:transaction) |> with_block(block)
       insert(:token_transfer, transaction: transaction)
@@ -75,24 +67,6 @@ defmodule Indexer.Temporary.DoubleTokenTransfersTest do
       assert 0 =
                from(t in TokenTransfer, where: t.transaction_hash == ^transaction.hash)
                |> Repo.aggregate(:count, :transaction_hash)
-    end
-
-    test "updates block_refetcher data after correcting a block" do
-      block = insert(:block)
-      transaction = insert(:transaction) |> with_block(block)
-      insert(:token_transfer, transaction: transaction)
-      insert(:token_transfer, transaction: transaction)
-
-      insert(:log, transaction: transaction)
-      insert(:log, transaction: transaction)
-
-      assert %{first_block_number: nil} = @fetcher_name |> BlockRefetcher.fetch() |> Repo.one()
-
-      block_number = block.number
-
-      DoubleTokenTransfers.run([block_number], nil)
-
-      assert %{first_block_number: block_number} = @fetcher_name |> BlockRefetcher.fetch() |> Repo.one()
     end
   end
 end
