@@ -14,8 +14,8 @@ defmodule Explorer.Chain.Import.Stage.BlockFollowing do
   def runners,
     do: [
       Runner.InternalTransactionsIndexedAtBlocks,
-      Runner.Block.Rewards,
       Runner.Block.SecondDegreeRelations,
+      Runner.Block.Rewards,
       Runner.InternalTransactions,
       Runner.Address.CurrentTokenBalances
     ]

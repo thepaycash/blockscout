@@ -108,11 +108,22 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
                                                } ->
       remove_nonconsensus_logs(repo, nonconsensus_block_numbers, transactions, insert_options)
     end)
-    |> Multi.run(:remove_nonconsensus_internal_transactions, fn repo,
-                                                          %{nonconsensus_block_numbers: nonconsensus_block_numbers} ->
-      remove_nonconsensus_internal_transactions(repo, nonconsensus_block_numbers, insert_options)
+    |> Multi.run(:acquire_internal_transactions, fn repo,
+                                                    %{
+                                                      nonconsensus_block_numbers: nonconsensus_block_numbers,
+                                                      fork_transactions: transactions
+                                                    } ->
+      acquire_internal_transactions(repo, nonconsensus_block_numbers, hashes, transactions)
     end)
-    |> Multi.run(:internal_transaction_transaction_block_number, fn repo, %{blocks: blocks} when is_list(blocks) ->
+    |> Multi.run(:remove_nonconsensus_internal_transactions, fn repo,
+                                                                %{
+                                                                  nonconsensus_block_numbers:
+                                                                    nonconsensus_block_numbers,
+                                                                  fork_transactions: transactions
+                                                                } ->
+      remove_nonconsensus_internal_transactions(repo, nonconsensus_block_numbers, transactions, insert_options)
+    end)
+    |> Multi.run(:internal_transaction_transaction_block_number, fn repo, _ ->
       update_internal_transaction_block_number(repo, hashes)
     end)
     |> Multi.run(:acquire_contract_address_tokens, fn repo, _ ->
@@ -174,6 +185,29 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
     contract_address_hashes = repo.all(query)
 
     Tokens.acquire_contract_address_tokens(repo, contract_address_hashes)
+  end
+
+  defp acquire_internal_transactions(repo, nonconsensus_block_numbers, hashes, forked_transactions) do
+    forked_transaction_hashes = Enum.map(forked_transactions, & &1.hash)
+
+    query =
+      from(internal_transaction in InternalTransaction,
+        join: transaction in Transaction,
+        on: internal_transaction.transaction_hash == transaction.hash,
+        where: transaction.block_number in ^nonconsensus_block_numbers,
+        or_where: transaction.block_hash in ^hashes,
+        or_where: transaction.hash in ^forked_transaction_hashes,
+        select: {internal_transaction.transaction_hash, internal_transaction.index},
+        # Enforce InternalTransaction ShareLocks order (see docs: sharelocks.md)
+        order_by: [
+          internal_transaction.transaction_hash,
+          internal_transaction.index
+        ],
+        # NOTE: find a better way to know the alias that ecto gives to token
+        lock: "FOR UPDATE OF i0"
+      )
+
+    {:ok, repo.all(query)}
   end
 
   defp fork_transactions(%{
@@ -399,37 +433,27 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
     end
   end
 
-  defp remove_nonconsensus_internal_transactions(repo, nonconsensus_block_numbers, %{timeout: timeout}) do
+  defp remove_nonconsensus_internal_transactions(repo, nonconsensus_block_numbers, forked_transactions, %{
+         timeout: timeout
+       }) do
+    forked_transaction_hashes = Enum.map(forked_transactions, & &1.hash)
+
     transaction_query =
       from(transaction in Transaction,
         where: transaction.block_number in ^nonconsensus_block_numbers,
-        select: map(transaction, [:hash]),
-        order_by: transaction.hash
-      )
-
-    ordered_internal_transactions =
-      from(internal_transaction in InternalTransaction,
-        inner_join: transaction in subquery(transaction_query),
-        on: internal_transaction.transaction_hash == transaction.hash,
-        select: map(internal_transaction, [:transaction_hash, :index]),
-        # Enforce InternalTransaction ShareLocks order (see docs: sharelocks.md)
-        order_by: [
-          internal_transaction.transaction_hash,
-          internal_transaction.index
-        ],
-        lock: "FOR UPDATE OF i0"
+        or_where: transaction.hash in ^forked_transaction_hashes,
+        select: map(transaction, [:hash])
       )
 
     query =
       from(internal_transaction in InternalTransaction,
-        select: map(internal_transaction, [:transaction_hash, :index]),
-        inner_join: ordered_internal_transaction in subquery(ordered_internal_transactions),
-        on:
-          ordered_internal_transaction.transaction_hash == internal_transaction.transaction_hash and
-            ordered_internal_transaction.index == internal_transaction.index
+        inner_join: transaction in subquery(transaction_query),
+        on: internal_transaction.transaction_hash == transaction.hash,
+        select: map(internal_transaction, [:transaction_hash, :index])
       )
 
     try do
+      # ShareLocks order already enforced by `acquire_internal_transactions` (see docs: sharelocks.md)
       {_count, deleted_internal_transactions} = repo.delete_all(query, timeout: timeout)
 
       {:ok, deleted_internal_transactions}
@@ -712,26 +736,11 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
         join: block in Block,
         on: block.hash == transaction.block_hash,
         where: block.hash in ^blocks_hashes,
-        select: %{
-          transaction_hash: internal_transaction.transaction_hash,
-          index: internal_transaction.index,
-          block_number: block.number
-        },
-        # Enforce InternalTransaction ShareLocks order (see docs: sharelocks.md)
-        order_by: [asc: :transaction_hash, asc: :index],
-        # NOTE: find a better way to know the alias that ecto gives to internal_transaction
-        lock: "FOR UPDATE OF i0"
+        update: [set: [block_number: block.number]]
       )
 
-    update_query =
-      from(
-        i in InternalTransaction,
-        join: s in subquery(query),
-        on: i.transaction_hash == s.transaction_hash and i.index == s.index,
-        update: [set: [block_number: s.block_number]]
-      )
-
-    {total, _} = repo.update_all(update_query, [])
+    # ShareLocks order already enforced by `acquire_internal_transactions` (see docs: sharelocks.md)
+    {total, _} = repo.update_all(query, [])
 
     {:ok, total}
   end

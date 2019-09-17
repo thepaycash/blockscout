@@ -109,7 +109,7 @@ defmodule Explorer.Chain.Import.Runner.Address.CurrentTokenBalances do
     # Enforce ShareLocks tables order (see docs: sharelocks.md)
     multi
     |> Multi.run(:acquire_contract_address_tokens, fn repo, _ ->
-      contract_address_hashes = Enum.map(changes_list, & &1.token_contract_address_hash)
+      contract_address_hashes = changes_list |> Enum.map(& &1.token_contract_address_hash) |> Enum.uniq()
       Tokens.acquire_contract_address_tokens(repo, contract_address_hashes)
     end)
     |> Multi.run(:address_current_token_balances, fn repo, _ ->
