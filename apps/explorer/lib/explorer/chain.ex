@@ -41,6 +41,7 @@ defmodule Explorer.Chain do
     SmartContract,
     StakingPool,
     Token,
+    Token.Instance,
     TokenTransfer,
     Transaction,
     Wei
@@ -1915,6 +1916,18 @@ defmodule Explorer.Chain do
     Repo.one!(query)
   end
 
+  def count_db_decompiled_contracts do
+    query = from(p in "pg_class", select: p.reltuples, where: p.relname == "decompiled_smart_contracts")
+
+    query
+    |> Repo.one()
+    |> decompiled_contracts_count()
+  end
+
+  defp decompiled_contracts_count(count) do
+    {:ok, count}
+  end
+
   def last_db_block_status do
     query =
       from(block in Block,
@@ -2963,9 +2976,19 @@ defmodule Explorer.Chain do
     TokenTransfer.fetch_token_transfers_from_token_hash(token_address_hash, options)
   end
 
+  @spec fetch_token_transfers_from_token_hash_and_token_id(Hash.t(), binary(), [paging_options]) :: []
+  def fetch_token_transfers_from_token_hash_and_token_id(token_address_hash, token_id, options \\ []) do
+    TokenTransfer.fetch_token_transfers_from_token_hash_and_token_id(token_address_hash, token_id, options)
+  end
+
   @spec count_token_transfers_from_token_hash(Hash.t()) :: non_neg_integer()
   def count_token_transfers_from_token_hash(token_address_hash) do
     TokenTransfer.count_token_transfers_from_token_hash(token_address_hash)
+  end
+
+  @spec count_token_transfers_from_token_hash_and_token_id(Hash.t(), binary()) :: non_neg_integer()
+  def count_token_transfers_from_token_hash_and_token_id(token_address_hash, token_id) do
+    TokenTransfer.count_token_transfers_from_token_hash_and_token_id(token_address_hash, token_id)
   end
 
   @spec transaction_has_token_transfers?(Hash.t()) :: boolean()
@@ -3057,6 +3080,16 @@ defmodule Explorer.Chain do
         timeout: timeout
       )
     end
+  end
+
+  @spec upsert_token_instance(map()) :: {:ok, Instance.t()} | {:error, Ecto.Changeset.t()}
+  def upsert_token_instance(params) do
+    changeset = Instance.changeset(%Instance{}, params)
+
+    Repo.insert(changeset,
+      on_conflict: :replace_all,
+      conflict_target: [:token_id, :token_contract_address_hash]
+    )
   end
 
   @doc """
@@ -3699,6 +3732,99 @@ defmodule Explorer.Chain do
       from(
         transaction in Transaction,
         where: transaction.hash == ^hash
+      )
+
+    Repo.exists?(query)
+  end
+
+  @doc """
+  Checks if a `t:Explorer.Chain.Token.t/0` with the given `hash` exists.
+  Returns `:ok` if found
+      iex> address = insert(:address)
+      iex> insert(:token, contract_address: address)
+      iex> Explorer.Chain.check_token_exists(address.hash)
+      :ok
+  Returns `:not_found` if not found
+      iex> {:ok, hash} = Explorer.Chain.string_to_address_hash("0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed")
+      iex> Explorer.Chain.check_token_exists(hash)
+      :not_found
+  """
+  @spec check_token_exists(Hash.Address.t()) :: :ok | :not_found
+  def check_token_exists(hash) do
+    hash
+    |> token_exists?()
+    |> boolean_to_check_result()
+  end
+
+  @doc """
+  Checks if a `t:Explorer.Chain.Token.t/0` with the given `hash` exists.
+  Returns `true` if found
+      iex> address = insert(:address)
+      iex> insert(:token, contract_address: address)
+      iex> Explorer.Chain.token_exists?(address.hash)
+      true
+  Returns `false` if not found
+      iex> {:ok, hash} = Explorer.Chain.string_to_address_hash("0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed")
+      iex> Explorer.Chain.token_exists?(hash)
+      false
+  """
+  @spec token_exists?(Hash.Address.t()) :: boolean()
+  def token_exists?(hash) do
+    query =
+      from(
+        token in Token,
+        where: token.contract_address_hash == ^hash
+      )
+
+    Repo.exists?(query)
+  end
+
+  @doc """
+  Checks if a `t:Explorer.Chain.TokenTransfer.t/0` with the given `hash` and `token_id` exists.
+  Returns `:ok` if found
+      iex> contract_address = insert(:address)
+      iex> token_id = 10
+      iex> insert(:token_transfer,
+      ...>  from_address: contract_address,
+      ...>  token_contract_address: contract_address,
+      ...>  token_id: token_id
+      ...> )
+      iex> Explorer.Chain.check_erc721_token_instance_exists(token_id, contract_address.hash)
+      :ok
+  Returns `:not_found` if not found
+      iex> {:ok, hash} = Explorer.Chain.string_to_address_hash("0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed")
+      iex> Explorer.Chain.check_erc721_token_instance_exists(10, hash)
+      :not_found
+  """
+  @spec check_erc721_token_instance_exists(binary() | non_neg_integer(), Hash.Address.t()) :: :ok | :not_found
+  def check_erc721_token_instance_exists(token_id, hash) do
+    token_id
+    |> erc721_token_instance_exist?(hash)
+    |> boolean_to_check_result()
+  end
+
+  @doc """
+  Checks if a `t:Explorer.Chain.TokenTransfer.t/0` with the given `hash` and `token_id` exists.
+  Returns `true` if found
+      iex> contract_address = insert(:address)
+      iex> token_id = 10
+      iex> insert(:token_transfer,
+      ...>  from_address: contract_address,
+      ...>  token_contract_address: contract_address,
+      ...>  token_id: token_id
+      ...> )
+      iex> Explorer.Chain.erc721_token_instance_exist?(token_id, contract_address.hash)
+      true
+  Returns `false` if not found
+      iex> {:ok, hash} = Explorer.Chain.string_to_address_hash("0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed")
+      iex> Explorer.Chain.erc721_token_instance_exist?(10, hash)
+      false
+  """
+  @spec erc721_token_instance_exist?(binary() | non_neg_integer(), Hash.Address.t()) :: boolean()
+  def erc721_token_instance_exist?(token_id, hash) do
+    query =
+      from(tt in TokenTransfer,
+        where: tt.token_contract_address_hash == ^hash and tt.token_id == ^token_id
       )
 
     Repo.exists?(query)
