@@ -23,9 +23,9 @@ defmodule Explorer.Chain.Cache.Accounts do
   def prevails?({fetched_coin_balance_a, hash_a}, {fetched_coin_balance_b, hash_b}) do
     # same as a query's `order_by: [desc: :fetched_coin_balance, asc: :hash]`
     if fetched_coin_balance_a == fetched_coin_balance_b do
-      hash_a > hash_b
+      hash_a < hash_b
     else
-      fetched_coin_balance_a < fetched_coin_balance_b
+      fetched_coin_balance_a > fetched_coin_balance_b
     end
   end
 
