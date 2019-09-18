@@ -14,7 +14,7 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
 
   alias Ecto.Multi
   alias Explorer.Repo
-  alias Explorer.Chain.{Block, Log, TokenTransfer, Transaction}
+  alias Explorer.Chain.{Block, Hash, Log, TokenTransfer, Transaction}
   alias Indexer.BufferedTask
   alias Indexer.Temporary.DoubleTokenTransfers
 
@@ -22,8 +22,8 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
 
   @defaults [
     flush_interval: :timer.seconds(3),
-    max_batch_size: 50,
-    max_concurrency: 2,
+    max_batch_size: 10,
+    max_concurrency: 5,
     task_supervisor: Indexer.Temporary.DoubleTokenTransfers.TaskSupervisor,
     metadata: [fetcher: :doubled_token_transfers]
   ]
@@ -75,7 +75,15 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
             select: t.hash
           )
 
-        {:ok, repo.all(query)}
+        hashes =
+          query
+          |> repo.all()
+          |> Enum.map(fn h ->
+            {:ok, hash_bytes} = Hash.Full.dump(h)
+            hash_bytes
+          end)
+
+        {:ok, hashes}
       end)
       |> Multi.run(:remove_blocks_consensus, fn repo, _ ->
         query =
@@ -99,10 +107,11 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
         query =
           from(
             log in Log,
-            where: log.transaction_hash in ^hashes,
+            join: t in fragment("(SELECT unnest(?::bytea[]) as hash)", ^hashes),
+            on: t.hash == log.transaction_hash,
             # Enforce Log ShareLocks order (see docs: sharelocks.md)
             order_by: [asc: log.transaction_hash, asc: log.index],
-            lock: "FOR UPDATE"
+            lock: "FOR UPDATE OF l0"
           )
 
         {_num, result} =
@@ -114,10 +123,11 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
         query =
           from(
             transfer in TokenTransfer,
+            join: t in fragment("(SELECT unnest(?::bytea[]) as hash)", ^hashes),
             where: transfer.transaction_hash in ^hashes,
             # Enforce TokenTransfer ShareLocks order (see docs: sharelocks.md)
             order_by: [asc: transfer.transaction_hash, asc: transfer.log_index],
-            lock: "FOR UPDATE"
+            lock: "FOR UPDATE OF t0"
           )
 
         {_num, result} =
@@ -146,18 +156,18 @@ defmodule Indexer.Temporary.DoubleTokenTransfers do
 
     try do
       multi
-      |> Repo.transaction()
+      |> Repo.transaction(timeout: :infinity)
       |> case do
         {:ok, _res} ->
           :ok
 
         {:error, error} ->
-          Logger.error(fn -> ["Error while handling double token transfers", inspect(error)] end)
+          Logger.error(fn -> ["Error while handling double token transfers: ", inspect(error)] end)
           {:retry, block_numbers}
       end
     rescue
       postgrex_error in Postgrex.Error ->
-        Logger.error(fn -> ["Error while handling double token transfers", inspect(postgrex_error)] end)
+        Logger.error(fn -> ["Error while handling double token transfers: ", inspect(postgrex_error)] end)
         {:retry, block_numbers}
     end
   end
