@@ -124,7 +124,7 @@ defmodule Indexer.Temporary.MissingTokenTransfers do
           from(
             transfer in TokenTransfer,
             join: t in fragment("(SELECT unnest(?::bytea[]) as hash)", ^hashes),
-            where: transfer.transaction_hash in ^hashes,
+            on: t.hash == transfer.transaction_hash,
             # Enforce TokenTransfer ShareLocks order (see docs: sharelocks.md)
             order_by: [asc: transfer.transaction_hash, asc: transfer.log_index],
             lock: "FOR UPDATE OF t0"
