@@ -15,6 +15,7 @@
 - [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
 
 ### Fixes
+- [#2709](https://github.com/poanetwork/blockscout/pull/2709) - Fix stuck label and value for uncle block height
 - [#2707](https://github.com/poanetwork/blockscout/pull/2707) - fix for dashboard banner chart legend items
 - [#2706](https://github.com/poanetwork/blockscout/pull/2706) - fix empty total_supply in coin gecko response
 - [#2701](https://github.com/poanetwork/blockscout/pull/2701) - Exclude nonconsensus blocks from avg block time calculation by default
