@@ -12,6 +12,7 @@ defmodule Indexer.Temporary.MissingTokenTransfers do
 
   import Ecto.Query
 
+  alias Ecto.Adapters.SQL
   alias Ecto.Multi
   alias Explorer.Repo
   alias Explorer.Chain.{Block, Hash, Log, TokenTransfer, Transaction}
@@ -45,12 +46,15 @@ defmodule Indexer.Temporary.MissingTokenTransfers do
       from(
         s in MissingTokenTransfers.Schema,
         where: is_nil(s.refetched) or not s.refetched,
+        where: not is_nil(s.block_number),
         # goes from latest to newest
         order_by: [desc: s.block_number],
         select: s.block_number
       )
 
     {:ok, final} = Repo.stream_reduce(query, initial, &reducer.(&1, &2))
+
+    drop_table_when_finished(final)
 
     final
   rescue
@@ -60,6 +64,13 @@ defmodule Indexer.Temporary.MissingTokenTransfers do
         %{postgres: %{code: :undefined_table}} -> {0, []}
         _ -> raise postgrex_error
       end
+  end
+
+  # sobelow_skip ["SQL.Query"]
+  defp drop_table_when_finished(final) do
+    if {0, []} == final do
+      SQL.query!(Repo, "DROP TABLE blocks_to_invalidate_missing_tt", [])
+    end
   end
 
   @impl BufferedTask
