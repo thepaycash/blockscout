@@ -1,6 +1,7 @@
 ## Current
 
 ### Features
+- [#2717](https://github.com/poanetwork/blockscout/pull/2717) - Improve speed of nonconsensus data removal
 - [#2699](https://github.com/poanetwork/blockscout/pull/2699) - Add temporary indexer to trigger refetching of blocks with missing token transfers
 - [#2697](https://github.com/poanetwork/blockscout/pull/2697) - Add temporary indexer to trigger refetching of blocks where internal transactions number doesn't match
 - [#2695](https://github.com/poanetwork/blockscout/pull/2695) - Add temporary indexer to trigger refetching of blocks with duplicated token transfers
