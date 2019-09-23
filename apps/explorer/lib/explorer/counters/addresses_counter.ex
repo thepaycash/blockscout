@@ -1,6 +1,6 @@
 defmodule Explorer.Counters.AddressesCounter do
   @moduledoc """
-  Caches the number of addresses with fetched coin balance > 0.
+  Caches the number of all addresses.
 
   It loads the count asynchronously and in a time interval of 30 minutes.
   """
