@@ -58,7 +58,8 @@ BEGIN
           )
         OR EXISTS (
           SELECT 1 FROM logs l
-          WHERE l.first_topic LIKE '0xddf252ad%'
+          WHERE l.transaction_hash = t.hash
+          AND l.first_topic LIKE '0xddf252ad%'
           AND (
             (l.second_topic IS NOT NULL AND l.third_topic IS NOT NULL)
             OR
