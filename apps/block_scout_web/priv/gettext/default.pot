@@ -1804,7 +1804,6 @@ msgid "true"
 msgstr ""
 
 #, elixir-format
-<<<<<<< HEAD
 #: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:31
 #: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:35
 msgid "Copy Token ID"
@@ -1876,6 +1875,7 @@ msgstr ""
 msgid "Transfers"
 msgstr ""
 
+#, elixir-format
 #: lib/block_scout_web/templates/transaction_log/_logs.html.eex:189
 msgid "Log Index"
 msgstr ""

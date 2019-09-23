@@ -1804,7 +1804,6 @@ msgid "true"
 msgstr ""
 
 #, elixir-format
-<<<<<<< HEAD
 #: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:31
 #: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:35
 msgid "Copy Token ID"
