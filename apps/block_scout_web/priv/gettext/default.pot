@@ -1863,8 +1863,3 @@ msgstr ""
 #: lib/block_scout_web/templates/tokens/overview/_details.html.eex:64
 msgid "Transfers"
 msgstr ""
-
-#, elixir-format
-#: lib/block_scout_web/templates/transaction_log/_logs.html.eex:189
-msgid "Log Index"
-msgstr ""
