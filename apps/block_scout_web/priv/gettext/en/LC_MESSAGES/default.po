@@ -1809,6 +1809,12 @@ msgstr ""
 msgid "Copy Token ID"
 msgstr ""
 
+#, elixir-format, fuzzy
+#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:69
+#: lib/block_scout_web/templates/tokens/overview/_details.html.eex:67
+msgid "Decimals"
+msgstr ""
+
 #, elixir-format
 #: lib/block_scout_web/templates/transaction/overview.html.eex:232
 msgid "Gas"
@@ -1831,18 +1837,8 @@ msgid "Loading chart"
 msgstr ""
 
 #, elixir-format
-#: lib/block_scout_web/templates/api_docs/_action_tile.html.eex:58
-msgid "Module"
-msgstr ""
-
-#, elixir-format
-#: lib/block_scout_web/templates/chain/show.html.eex:56
-msgid "Total transactions"
-msgstr ""
-
-#, elixir-format
-#: lib/block_scout_web/templates/tokens/instance/metadata/index.html.eex:20
-msgid "Copy Metadata"
+#: lib/block_scout_web/templates/transaction_log/_logs.html.eex:189
+msgid "Log Index"
 msgstr ""
 
 #, elixir-format
@@ -1852,21 +1848,14 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#, elixir-format
-#: lib/block_scout_web/templates/address/_validator_metadata_modal.html.eex:37
-#: lib/block_scout_web/templates/address/overview.html.eex:145
-#: lib/block_scout_web/templates/address/overview.html.eex:153
-#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:94
-#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:102
-#: lib/block_scout_web/templates/tokens/overview/_details.html.eex:110
-#: lib/block_scout_web/templates/tokens/overview/_details.html.eex:118
-msgid "Close"
+#, elixir-format, fuzzy
+#: lib/block_scout_web/templates/api_docs/_action_tile.html.eex:58
+msgid "Module"
 msgstr ""
 
-#, elixir-format
-#: lib/block_scout_web/templates/tokens/instance/overview/_details.html.eex:69
-#: lib/block_scout_web/templates/tokens/overview/_details.html.eex:67
-msgid "Decimals"
+#, elixir-format, fuzzy
+#: lib/block_scout_web/templates/chain/show.html.eex:56
+msgid "Total transactions"
 msgstr ""
 
 #, elixir-format
