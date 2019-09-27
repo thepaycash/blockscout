@@ -102,11 +102,7 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
         timestamps: timestamps
       )
 
-    {:ok,
-     for(
-       internal_transaction <- internal_transactions,
-       do: Map.take(internal_transaction, [:id, :index, :transaction_hash])
-     )}
+    {:ok, internal_transactions}
   end
 
   defp default_on_conflict do
