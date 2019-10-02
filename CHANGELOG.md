@@ -19,6 +19,7 @@
 - [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
 
 ### Fixes
+- [#2747](https://github.com/poanetwork/blockscout/pull/2747) - Improved contract method decoded view
 - [#2742](https://github.com/poanetwork/blockscout/pull/2742) -
 fixed menu hovers in dark mode desktop view
 - [#2737](https://github.com/poanetwork/blockscout/pull/2737) - switched hardcoded subnetwork value to elixir expression for mobile menu
