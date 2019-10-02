@@ -20,6 +20,7 @@
 
 ### Fixes
 - [#2747](https://github.com/poanetwork/blockscout/pull/2747) - Improved contract method decoded view
+- [#2745](https://github.com/poanetwork/blockscout/pull/2745) - optimize addresses page
 - [#2742](https://github.com/poanetwork/blockscout/pull/2742) -
 fixed menu hovers in dark mode desktop view
 - [#2737](https://github.com/poanetwork/blockscout/pull/2737) - switched hardcoded subnetwork value to elixir expression for mobile menu
