@@ -19,11 +19,17 @@
 - [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
 
 ### Fixes
+<<<<<<< HEAD
 - [#2747](https://github.com/poanetwork/blockscout/pull/2747) - Improved contract method decoded view
 - [#2745](https://github.com/poanetwork/blockscout/pull/2745) - optimize addresses page
 - [#2742](https://github.com/poanetwork/blockscout/pull/2742) -
 fixed menu hovers in dark mode desktop view
 - [#2738](https://github.com/poanetwork/blockscout/pull/2738) - do not fail block `internal_transactions_indexed_at` field update
+=======
+- [#2745](https://github.com/poanetwork/blockscout/pull/2745) - optimize addresses page
+- [#2742](https://github.com/poanetwork/blockscout/pull/2742) -
+fixed menu hovers in dark mode desktop view
+>>>>>>> origin/ab-batch-token-updates
 - [#2737](https://github.com/poanetwork/blockscout/pull/2737) - switched hardcoded subnetwork value to elixir expression for mobile menu
 - [#2736](https://github.com/poanetwork/blockscout/pull/2736) - do not update cache if no blocks were inserted
 - [#2731](https://github.com/poanetwork/blockscout/pull/2731) - fix library verification
