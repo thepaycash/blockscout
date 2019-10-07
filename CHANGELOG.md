@@ -18,6 +18,7 @@
 - [#2663](https://github.com/poanetwork/blockscout/pull/2663) - Fetch address counters in parallel
 - [#2642](https://github.com/poanetwork/blockscout/pull/2642) - add ERC721 coin instance page
 - [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
+- [#2762](https://github.com/poanetwork/blockscout/pull/2762) - on-fly fetching of token instances
 
 ### Fixes
 - [#2755](https://github.com/poanetwork/blockscout/pull/2755) - various token instance fetcher fixes
