@@ -21,6 +21,7 @@
 - [#2762](https://github.com/poanetwork/blockscout/pull/2762) - on-fly fetching of token instances
 
 ### Fixes
+- [#2769](https://github.com/poanetwork/blockscout/pull/2769) - optimize token token transfers query
 - [#2765](https://github.com/poanetwork/blockscout/pull/2765) - fixed width issue for cards in mobile view for Transaction Details page
 - [#2761](https://github.com/poanetwork/blockscout/pull/2761) - add indexes for token instances fetching queries
 - [#2756](https://github.com/poanetwork/blockscout/pull/2756) - Improve subquery joins
