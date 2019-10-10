@@ -21,6 +21,7 @@
 - [#2762](https://github.com/poanetwork/blockscout/pull/2762) - on-fly fetching of token instances
 
 ### Fixes
+- [#2770](https://github.com/poanetwork/blockscout/pull/2770) - do not re-fetch token instances without uris
 - [#2769](https://github.com/poanetwork/blockscout/pull/2769) - optimize token token transfers query
 - [#2768](https://github.com/poanetwork/blockscout/pull/2768) - Remove nonconsensus blocks from cache after internal transactions importing
 - [#2765](https://github.com/poanetwork/blockscout/pull/2765) - fixed width issue for cards in mobile view for Transaction Details page
