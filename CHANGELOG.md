@@ -20,6 +20,7 @@
 - [#2642](https://github.com/poanetwork/blockscout/pull/2642) - add ERC721 coin instance page
 - [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
 - [#2762](https://github.com/poanetwork/blockscout/pull/2762) - on-fly fetching of token instances
+- [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
 
 ### Fixes
 - [#2770](https://github.com/poanetwork/blockscout/pull/2770) - do not re-fetch token instances without uris
