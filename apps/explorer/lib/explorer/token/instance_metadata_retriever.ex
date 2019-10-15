@@ -48,41 +48,18 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
     Reader.query_contract(contract_address_hash, @abi, contract_functions)
   end
 
-  defp fetch_json(%{"tokenURI" => {:ok, [""]}}) do
+  def fetch_json(%{"tokenURI" => {:ok, [""]}}) do
     {:ok, %{error: @no_uri_error}}
   end
 
-  defp fetch_json(%{"tokenURI" => {:error, "(-32015) VM execution error."}}) do
+  def fetch_json(%{"tokenURI" => {:error, "(-32015) VM execution error."}}) do
     {:ok, %{error: @no_uri_error}}
   end
 
-  defp fetch_json(%{"tokenURI" => {:ok, ["http://" <> _ = token_uri]}}) do
-    fetch_metadata(token_uri)
-  end
-
-  defp fetch_json(%{"tokenURI" => {:ok, ["https://" <> _ = token_uri]}}) do
-    fetch_metadata(token_uri)
-  end
-
-  defp fetch_json(%{"tokenURI" => {:ok, [json]}}) do
-    Jason.decode(json)
-  rescue
-    e ->
-      Logger.error(fn -> ["Unknown metadata format #{inspect(json)}. error #{inspect(e)}"] end)
-
-      {:error, json}
-  end
-
-  defp fetch_json(result) do
-    Logger.error(fn -> ["Unknown metadata format #{inspect(result)}."] end)
-
-    {:error, result}
-  end
-
-  defp fetch_metadata(token_uri) do
+  def fetch_json(%{"tokenURI" => {:ok, [token_uri]}}) do
     case HTTPoison.get(token_uri) do
       {:ok, %Response{body: body, status_code: 200}} ->
-        {:ok, json} = Jason.decode(body)
+        {:ok, json} = decode_json(body)
 
         {:ok, %{metadata: json}}
 
@@ -92,10 +69,19 @@ defmodule Explorer.Token.InstanceMetadataRetriever do
       {:error, %Error{reason: reason}} ->
         {:error, reason}
     end
-  rescue
-    e ->
-      Logger.error(fn -> ["Could not send request to token uri #{inspect(token_uri)}. error #{inspect(e)}"] end)
+  end
 
-      {:error, :request_error}
+  def fetch_json(result) do
+    {:error, result}
+  end
+
+  defp decode_json(body) do
+    if String.valid?(body) do
+      Jason.decode(body)
+    else
+      body
+      |> :unicode.characters_to_binary(:latin1)
+      |> Jason.decode()
+    end
   end
 end
