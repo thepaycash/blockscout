@@ -73,19 +73,8 @@ textarea.form-control {
 }
 
 .contract-address {
-    display: inline-block;
-    text-decoration: underline;
-    -webkit-text-decoration-style: dashed;
-    text-decoration-style: dashed;
-    max-width: 300px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   &:hover {
     text-decoration-style: none;
-  }
-  @media screen and (max-width: 768px) {
-    max-width: 172px;
   }
 }
 

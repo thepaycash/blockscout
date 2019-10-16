@@ -34,7 +34,6 @@
 - [#2755](https://github.com/poanetwork/blockscout/pull/2755) - various token instance fetcher fixes
 - [#2753](https://github.com/poanetwork/blockscout/pull/2753) - fix nft token instance images
 - [#2750](https://github.com/poanetwork/blockscout/pull/2750) - fixed contract buttons color for NFT token instance on each theme
-- [#2747](https://github.com/poanetwork/blockscout/pull/2747) - Improved contract method decoded view
 - [#2746](https://github.com/poanetwork/blockscout/pull/2746) - fixed wrong alignment in logs decoded view
 - [#2745](https://github.com/poanetwork/blockscout/pull/2745) - optimize addresses page
 - [#2742](https://github.com/poanetwork/blockscout/pull/2742) -
