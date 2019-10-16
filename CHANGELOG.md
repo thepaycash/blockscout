@@ -62,6 +62,7 @@ fixed menu hovers in dark mode desktop view
 
 
 ### Chore
+- [#2752](https://github.com/poanetwork/blockscout/pull/2752) - allow enabling internal transactions for simple token transfers txs
 - [#2749](https://github.com/poanetwork/blockscout/pull/2749) - fix opt 22.1 support
 - [#2724](https://github.com/poanetwork/blockscout/pull/2724) - fix ci by commenting a line in hackney library
 - [#2708](https://github.com/poanetwork/blockscout/pull/2708) - add log index to logs view

@@ -72,5 +72,6 @@ $ export NETWORK=POA
 | `MAX_SKIPPING_DISTANCE` | | The maximum distance the indexer is allowed to wait for when notified of a number not following the lask known one. | 4 | master |
 | `DOUBLE_TOKEN_TRANSFERS_START` | | The block number that the `:double_token_transfers` refercher has to start checking from (exclusive). If `nil` it will start from the beginning. | `nil` | v2.0.4+ | | |
 | `DOUBLE_TOKEN_TRANSFERS_END` | | The block number that the `:double_token_transfers` refercher has to stop checking to (inclusive). If `nil` it will never stop | `nil` | v2.0.4+ | | |
+| `INTERNAL_TRANSACTIONOS_FOR_TOKEN_TRANSFERS` | | Does not applicable for parity because we fetch all transactions for it. If set to true fetches internal transactions for simple token transfers transactions. It's disabled by default to increase internal transactions indexing speed | `false` | master | | |
 | `BLOCKSCOUT_PROTOCOL` | | Url scheme for blockscout | in prod env `https` is used, in dev env `http` is used | master | | |
 | `MAX_SKIPPING_DISTANCE` | | The maximum distance the indexer is allowed to wait for when notified of a number not following the lask known one. | 4 | master | |
