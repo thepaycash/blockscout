@@ -883,7 +883,6 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/layout/_topnav.html.eex:20
-#: lib/block_scout_web/templates/layout/_topnav.html.eex:20
 msgid "Toggle navigation"
 msgstr ""
 
@@ -1853,7 +1852,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/block_scout_web/templates/tokens/instance/metadata/index.html.eex:20
 msgid "Copy Metadata"
 msgstr ""
