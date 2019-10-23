@@ -24,6 +24,11 @@
 - [#2470](https://github.com/poanetwork/blockscout/pull/2470) - Allow Realtime Fetcher to wait for small skips
 
 ### Fixes
+- [#2793](https://github.com/poanetwork/blockscout/pull/2793) - Hide "We are indexing this chain right now. Some of the counts may be inaccurate" banner if no txs in blockchain
+- [#2779](https://github.com/poanetwork/blockscout/pull/2779) - fix fetching `latin1` encoded data
+- [#2799](https://github.com/poanetwork/blockscout/pull/2799) - fix catchup fetcher for empty node and db
+- [#2783](https://github.com/poanetwork/blockscout/pull/2783) - Fix stuck value and ticker on the token page
+- [#2781](https://github.com/poanetwork/blockscout/pull/2781) - optimize txlist json rpc
 - [#2777](https://github.com/poanetwork/blockscout/pull/2777) - Remove duplicate blocks from changes_list before import
 - [#2770](https://github.com/poanetwork/blockscout/pull/2770) - do not re-fetch token instances without uris
 - [#2769](https://github.com/poanetwork/blockscout/pull/2769) - optimize token token transfers query
@@ -62,8 +67,13 @@ fixed menu hovers in dark mode desktop view
 
 
 ### Chore
+- [#2796](https://github.com/poanetwork/blockscout/pull/2796) - Optimize all images with ImageOptim
+- [#2794](https://github.com/poanetwork/blockscout/pull/2786) - update hosted versions in readme
+- [#2789](https://github.com/poanetwork/blockscout/pull/2786) - remove projects table in readme, link to docs version
+- [#2786](https://github.com/poanetwork/blockscout/pull/2786) - updated docs links, removed docs folder
 - [#2752](https://github.com/poanetwork/blockscout/pull/2752) - allow enabling internal transactions for simple token transfers txs
 - [#2749](https://github.com/poanetwork/blockscout/pull/2749) - fix opt 22.1 support
+- [#2744](https://github.com/poanetwork/blockscout/pull/2744) - Disable Geth tests in CI
 - [#2724](https://github.com/poanetwork/blockscout/pull/2724) - fix ci by commenting a line in hackney library
 - [#2708](https://github.com/poanetwork/blockscout/pull/2708) - add log index to logs view
 - [#2723](https://github.com/poanetwork/blockscout/pull/2723) - get rid of ex_json_schema warnings
