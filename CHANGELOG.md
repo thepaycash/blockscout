@@ -1,6 +1,7 @@
 ## Current
 
 ### Features
+- [#2791](https://github.com/poanetwork/blockscout/pull/2791) - add ipc client
 - [#2787](https://github.com/poanetwork/blockscout/pull/2787) - async fetching of address counters
 - [#2776](https://github.com/poanetwork/blockscout/pull/2776) - fetch token counters async
 - [#2772](https://github.com/poanetwork/blockscout/pull/2772) - add token instance images to the token inventory tab
