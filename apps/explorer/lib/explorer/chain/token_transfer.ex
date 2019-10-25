@@ -270,7 +270,6 @@ defmodule Explorer.Chain.TokenTransfer do
   @doc """
   A token ERC-721 is considered unique because it corresponds to the possession
   of a specific asset.
-
   To find out its current owner, it is necessary to look at the token last
   transfer.
   """

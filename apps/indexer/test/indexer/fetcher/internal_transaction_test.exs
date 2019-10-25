@@ -99,9 +99,9 @@ defmodule Indexer.Fetcher.InternalTransactionTest do
     end
 
     block_number = 1_000_006
-    insert(:block, number: block_number)
+    block = insert(:block, number: block_number)
 
-    assert :ok = InternalTransaction.run([block_number], json_rpc_named_arguments)
+    assert :ok = InternalTransaction.run([{block_number, block.hash}], json_rpc_named_arguments)
 
     assert InternalTransaction.init(
              [],
@@ -164,7 +164,7 @@ defmodule Indexer.Fetcher.InternalTransactionTest do
                [],
                fn block_number, acc -> [block_number | acc] end,
                json_rpc_named_arguments
-             ) == [block.number]
+             ) == [{block.number, block.hash}]
     end
 
     @tag :no_geth
@@ -287,6 +287,67 @@ defmodule Indexer.Fetcher.InternalTransactionTest do
         fetched_address = Repo.one(from(address in Address, where: address.hash == ^address))
 
         assert is_nil(fetched_address)
+      end
+    end
+
+    @tag :no_parity
+    test "sets block_hash", %{
+      json_rpc_named_arguments: json_rpc_named_arguments
+    } do
+      if json_rpc_named_arguments[:transport] == EthereumJSONRPC.Mox do
+        expect(EthereumJSONRPC.Mox, :json_rpc, fn _json, _options ->
+          {:ok,
+           [
+             %{
+               id: 0,
+               jsonrpc: "2.0",
+               result: %{
+                 "output" => "0x0",
+                 "stateDiff" => nil,
+                 "trace" => [
+                   %{
+                     "action" => %{
+                       "from" => "0x2d07e106b5d280e4ccc2d10deee62441c91d4340",
+                       "gas" => "0xb2ab",
+                       "init" =>
+                         "0x608060405234801561001057600080fd5b5060d38061001f6000396000f3fe6080604052600436106038577c010000000000000000000000000000000000000000000000000000000060003504633ccfd60b8114604f575b336000908152602081905260409020805434019055005b348015605a57600080fd5b5060616063565b005b33600081815260208190526040808220805490839055905190929183156108fc02918491818181858888f1935050505015801560a3573d6000803e3d6000fd5b505056fea165627a7a72305820e9a226f249def650de957dd8b4127b85a3049d6bfa818cadc4e2d3c44b6a53530029",
+                       "value" => "0x0"
+                     },
+                     "result" => %{
+                       "address" => "0xf4a5afe28b91cf928c2568805cfbb36d477f0b75",
+                       "code" =>
+                         "0x6080604052600436106038577c010000000000000000000000000000000000000000000000000000000060003504633ccfd60b8114604f575b336000908152602081905260409020805434019055005b348015605a57600080fd5b5060616063565b005b33600081815260208190526040808220805490839055905190929183156108fc02918491818181858888f1935050505015801560a3573d6000803e3d6000fd5b505056fea165627a7a72305820e9a226f249def650de957dd8b4127b85a3049d6bfa818cadc4e2d3c44b6a53530029",
+                       "gasUsed" => "0xa535"
+                     },
+                     "subtraces" => 0,
+                     "traceAddress" => [0],
+                     "type" => "create"
+                   }
+                 ],
+                 "vmTrace" => nil
+               }
+             }
+           ]}
+        end)
+
+        CoinBalance.Supervisor.Case.start_supervised!(json_rpc_named_arguments: json_rpc_named_arguments)
+
+        internal_transaction =
+          %Transaction{hash: %Hash{bytes: bytes}} =
+          insert(:transaction, hash: "0x03cd5899a63b6f6222afda8705d059fd5a7d126bcabe962fb654d9736e6bcafa")
+          |> with_block()
+
+        :ok =
+          InternalTransaction.run(
+            [
+              {7_202_692, bytes, 0, internal_transaction.block_hash}
+            ],
+            json_rpc_named_arguments
+          )
+
+        fetched_internal_transaction = Repo.one(Explorer.Chain.InternalTransaction)
+
+        assert !is_nil(fetched_internal_transaction.block_hash)
       end
     end
 

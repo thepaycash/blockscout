@@ -3,6 +3,7 @@
 ### Features
 - [#2791](https://github.com/poanetwork/blockscout/pull/2791) - add ipc client
 - [#2787](https://github.com/poanetwork/blockscout/pull/2787) - async fetching of address counters
+- [#2449](https://github.com/poanetwork/blockscout/pull/2449) - add ability to send notification events through postgres notify
 
 ### Fixes
 - [#2800](https://github.com/poanetwork/blockscout/pull/2800) - return not found for not verified contract for token read_contract
