@@ -5,6 +5,7 @@
 - [#2787](https://github.com/poanetwork/blockscout/pull/2787) - async fetching of address counters
 
 ### Fixes
+- [#2800](https://github.com/poanetwork/blockscout/pull/2800) - return not found for not verified contract for token read_contract
 
 ### Chore
 - [#2801](https://github.com/poanetwork/blockscout/pull/2801) - remove unused clause in address_to_unique_tokens query
