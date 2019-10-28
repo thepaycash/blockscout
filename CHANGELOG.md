@@ -9,6 +9,7 @@
 - [#2800](https://github.com/poanetwork/blockscout/pull/2800) - return not found for not verified contract for token read_contract
 
 ### Chore
+- [#2805](https://github.com/poanetwork/blockscout/pull/2805) - Update supported chains default option
 - [#2801](https://github.com/poanetwork/blockscout/pull/2801) - remove unused clause in address_to_unique_tokens query
 
 
