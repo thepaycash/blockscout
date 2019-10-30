@@ -39,10 +39,7 @@ defmodule BlockScoutWeb.AddressReadContractController do
         not_found(conn)
       end
     else
-      :error ->
-        not_found(conn)
-
-      {:error, :not_found} ->
+      _ ->
         not_found(conn)
     end
   end
