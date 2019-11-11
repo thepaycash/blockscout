@@ -25,7 +25,7 @@ defmodule Explorer.Repo.Migrations.UpdateInternalTransactionsFillBlockHashBlockI
       current_block_number := (SELECT block_number FROM updated_blocks_in_internal_transactions_with_block_hash);
       
       -- COMMIT TABLE CREATION
-        COMMIT;
+      CHECKPOINT;
       
       WHILE current_block_number >= 0 LOOP
         current_block_number := (SELECT block_number FROM updated_blocks_in_internal_transactions_with_block_hash);
@@ -55,7 +55,7 @@ defmodule Explorer.Repo.Migrations.UpdateInternalTransactionsFillBlockHashBlockI
         UPDATE updated_blocks_in_internal_transactions_with_block_hash SET block_number = current_block_number;
         
         -- COMMIT THE BATCH UPDATES
-          COMMIT;
+        CHECKPOINT;
       END LOOP;
       
       RAISE NOTICE 'SCRIPT FINISHED';
