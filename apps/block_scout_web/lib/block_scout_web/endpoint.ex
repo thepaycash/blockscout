@@ -27,7 +27,6 @@ defmodule BlockScoutWeb.Endpoint do
       android-chrome-512x512.png
       apple-touch-icon.png
       browserconfig.xml
-      favicon.ico
       mstile-150x150.png
       safari-pinned-tab.svg
       site.manifest
