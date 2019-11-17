@@ -2,6 +2,6 @@ defmodule Explorer.Repo.Migrations.CreateInternalTransactionsIndexBlockHashBlock
   use Ecto.Migration
 
   def change do
-	create(unique_index(:internal_transactions, [:block_hash, :block_index]))
+	create(index(:internal_transactions, [:block_hash, :block_index]))
   end
 end
