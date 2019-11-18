@@ -1,9 +1,9 @@
 import $ from 'jquery'
-import Chart from 'chart.js'
+import Chart from 'chart.js/dist/Chart.min.js'
 import humps from 'humps'
 import numeral from 'numeral'
 import { formatUsdValue } from '../lib/currency'
-import sassVariables from '../../css/app.scss'
+import sassVariables from '../../css/main-page.scss'
 import { showLoader } from '../lib/utils'
 
 const config = {
