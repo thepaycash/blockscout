@@ -26,6 +26,8 @@
 - [#2806](https://github.com/poanetwork/blockscout/pull/2806) - Fix blocks fetching on the main page
 - [#2803](https://github.com/poanetwork/blockscout/pull/2803) - Fix block validator custom tooltip
 - [#2800](https://github.com/poanetwork/blockscout/pull/2800) - return not found for not verified contract for token read_contract
+- [#2704](https://github.com/poanetwork/blockscout/pull/2704) - refetch null values in token balances
+- [#2690](https://github.com/poanetwork/blockscout/pull/2690) - do not stich json rpc config into module for net version cache
 
 ### Chore
 - [#2859](https://github.com/poanetwork/blockscout/pull/2859) - Add eth_blockNumber API endpoint to eth_rpc section
@@ -107,7 +109,6 @@ fixed menu hovers in dark mode desktop view
 - [#2671](https://github.com/poanetwork/blockscout/pull/2671) - fixed buttons color at smart contract section
 - [#2660](https://github.com/poanetwork/blockscout/pull/2660) - set correct last value for coin balances chart data
 - [#2619](https://github.com/poanetwork/blockscout/pull/2619) - Enforce DB transaction's order to prevent deadlocks
-
 
 ### Chore
 - [#2797](https://github.com/poanetwork/blockscout/pull/2797) - Return old style menu
