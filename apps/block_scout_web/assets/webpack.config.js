@@ -44,7 +44,7 @@ const appJs =
       stakes: './js/pages/stakes.js',
       'non-critical': './css/non-critical.scss',
       awesomplete: './js/lib/awesomplete.js',
-      'awesomplete-util': './js/lib/awesomplete-util.js'
+      'awesomplete-util': './js/lib/awesomplete-util.js',
       'chart-loader': './js/chart-loader.js',
     },
     output: {
