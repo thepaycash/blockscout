@@ -3,8 +3,11 @@
 ### Features
 
 ### Fixes
+- [#2899](https://github.com/poanetwork/blockscout/pull/2899) - fix empty buffered task
 
 ### Chore
+
+- [#2896](https://github.com/poanetwork/blockscout/pull/2896) - Disable Parity websockets tests
 
 
 ## 2.1.1-beta
