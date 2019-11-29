@@ -1453,7 +1453,13 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
 
       internal_transaction =
         :internal_transaction_create
-        |> insert(transaction: transaction, index: 0, from_address: address)
+        |> insert(
+          transaction: transaction,
+          index: 0,
+          from_address: address,
+          block_hash: transaction.block_hash,
+          block_index: 0
+        )
         |> with_contract_creation(contract_address)
 
       params = %{
@@ -1502,7 +1508,9 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
         transaction: transaction,
         index: 0,
         type: :reward,
-        error: "some error"
+        error: "some error",
+        block_hash: transaction.block_hash,
+        block_index: 0
       ]
 
       insert(:internal_transaction_create, internal_transaction_details)
@@ -1532,7 +1540,12 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
         |> with_block()
 
       for index <- 0..2 do
-        insert(:internal_transaction_create, transaction: transaction, index: index)
+        insert(:internal_transaction_create,
+          transaction: transaction,
+          index: index,
+          block_hash: transaction.block_hash,
+          block_index: index
+        )
       end
 
       params = %{
@@ -1606,7 +1619,13 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
 
       internal_transaction =
         :internal_transaction_create
-        |> insert(transaction: transaction, index: 0, from_address: address)
+        |> insert(
+          transaction: transaction,
+          index: 0,
+          from_address: address,
+          block_hash: transaction.block_hash,
+          block_index: 0
+        )
         |> with_contract_creation(contract_address)
 
       params = %{
@@ -1658,7 +1677,9 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
         transaction: transaction,
         index: 0,
         type: :reward,
-        error: "some error"
+        error: "some error",
+        block_hash: transaction.block_hash,
+        block_index: 0
       ]
 
       insert(:internal_transaction_create, internal_transaction_details)
@@ -1693,7 +1714,9 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
         internal_transaction_details = %{
           from_address: address,
           transaction: transaction,
-          index: index
+          index: index,
+          block_hash: transaction.block_hash,
+          block_index: index
         }
 
         insert(:internal_transaction_create, internal_transaction_details)
@@ -1787,7 +1810,9 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
         insert(:token_transfer, %{
           token_contract_address: token_address,
           token_id: 666,
-          transaction: transaction
+          transaction: transaction,
+          block: transaction.block,
+          block_number: transaction.block_number
         })
 
       {:ok, _} = Chain.token_from_address_hash(token_transfer.token_contract_address_hash)
@@ -1817,7 +1842,9 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
         |> insert()
         |> with_block()
 
-      token_transfer = insert(:token_transfer, transaction: transaction)
+      token_transfer =
+        insert(:token_transfer, block: transaction.block, transaction: transaction, block_number: block.number)
+
       {:ok, token} = Chain.token_from_address_hash(token_transfer.token_contract_address_hash)
 
       params = %{
@@ -1894,8 +1921,20 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
         |> insert()
         |> with_block()
 
-      insert(:token_transfer, from_address: address, transaction: transaction)
-      insert(:token_transfer, from_address: address, token_contract_address: contract_address, transaction: transaction)
+      insert(:token_transfer,
+        from_address: address,
+        transaction: transaction,
+        block: transaction.block,
+        block_number: transaction.block_number
+      )
+
+      insert(:token_transfer,
+        from_address: address,
+        token_contract_address: contract_address,
+        transaction: transaction,
+        block: transaction.block,
+        block_number: transaction.block_number
+      )
 
       params = %{
         "module" => "account",
