@@ -5,6 +5,8 @@
 ### Fixes
 - [#2899](https://github.com/poanetwork/blockscout/pull/2899) - fix empty buffered task
 
+- [#2900](https://github.com/poanetwork/blockscout/pull/2900) - check fetched instance metadata in multiple places
+
 ### Chore
 
 - [#2896](https://github.com/poanetwork/blockscout/pull/2896) - Disable Parity websockets tests
