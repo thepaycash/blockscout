@@ -1,5 +1,4 @@
 import $ from 'jquery'
-import Chart from 'chart.js/dist/Chart.min.js'
 
 $(function () {
   $('.js-become-candidate').on('click', function () {
@@ -52,7 +51,7 @@ $(function () {
     const progressBackground = total - progress
 
     // eslint-disable-next-line no-unused-vars
-    const myChart = new Chart(stakeProgress, {
+    const myChart = new window.Chart(stakeProgress, {
       type: 'doughnut',
       data: {
         datasets: [{

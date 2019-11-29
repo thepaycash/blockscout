@@ -4,7 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="<%= static_path(@conn, "/js/chart-loader.js") %>"></script>
+
+    <script defer>
+      window.localized = {
+        'Blocks Indexed': '<%= gettext("Blocks Indexed") %>',
+        'Block Processing': '<%= gettext("Block Mined, awaiting import...") %>',
+        'Indexing Tokens': '<%= gettext("Indexing Tokens") %>',
+        'Less than': '<%= gettext("Less than") %>',
+        'Market Cap': '<%= gettext("Market Cap") %>',
+        'Price': '<%= gettext("Price") %>',
+        'Ether': '<%= gettext("Ether") %>'
+      }
+    </script>
+    <script defer src="<%= static_path(@conn, "/js/chart-loader.js") %>"></script>
 
     <%= if Enum.at(@conn.path_info, -1) do %>
       <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
@@ -57,17 +69,6 @@
       </main>
       <%= render BlockScoutWeb.LayoutView, "_footer.html", assigns %>
     </div>
-    <script>
-      window.localized = {
-        'Blocks Indexed': '<%= gettext("Blocks Indexed") %>',
-        'Block Processing': '<%= gettext("Block Mined, awaiting import...") %>',
-        'Indexing Tokens': '<%= gettext("Indexing Tokens") %>',
-        'Less than': '<%= gettext("Less than") %>',
-        'Market Cap': '<%= gettext("Market Cap") %>',
-        'Price': '<%= gettext("Price") %>',
-        'Ether': '<%= gettext("Ether") %>'
-      }
-    </script>
     <%= if Enum.at(@conn.path_info, -1) do %>
       <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
     <% else %>
