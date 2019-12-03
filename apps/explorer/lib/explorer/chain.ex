@@ -313,9 +313,9 @@ defmodule Explorer.Chain do
       |> fetch_transactions()
       |> join_associations(necessity_by_association)
 
-      base_query
-      |> Transaction.matching_address_queries_list(direction, address_hash)
-      |> Enum.map(fn query -> Task.async(fn -> Repo.all(query) end) end)
+    base_query
+    |> Transaction.matching_address_queries_list(direction, address_hash)
+    |> Enum.map(fn query -> Task.async(fn -> Repo.all(query) end) end)
   end
 
   defp wait_for_address_transactions(tasks) do
