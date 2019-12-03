@@ -1606,7 +1606,7 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
 
       internal_transaction =
         :internal_transaction_create
-        |> insert(transaction: transaction, index: 0, from_address: address)
+        |> insert(transaction: transaction, index: 0, from_address: address, block_number: 0)
         |> with_contract_creation(contract_address)
 
       params = %{
@@ -1658,7 +1658,8 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
         transaction: transaction,
         index: 0,
         type: :reward,
-        error: "some error"
+        error: "some error",
+        block_number: 0
       ]
 
       insert(:internal_transaction_create, internal_transaction_details)
@@ -1711,7 +1712,7 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
                |> get("/api", params)
                |> json_response(200)
 
-      assert length(found_internal_transactions) == 3
+      assert length(found_internal_transactions) == 2
       assert response["status"] == "1"
       assert response["message"] == "OK"
       assert :ok = ExJsonSchema.Validator.validate(txlistinternal_schema(), response)
