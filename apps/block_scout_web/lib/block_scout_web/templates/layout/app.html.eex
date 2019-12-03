@@ -5,19 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script defer>
-      window.localized = {
-        'Blocks Indexed': '<%= gettext("Blocks Indexed") %>',
-        'Block Processing': '<%= gettext("Block Mined, awaiting import...") %>',
-        'Indexing Tokens': '<%= gettext("Indexing Tokens") %>',
-        'Less than': '<%= gettext("Less than") %>',
-        'Market Cap': '<%= gettext("Market Cap") %>',
-        'Price': '<%= gettext("Price") %>',
-        'Ether': '<%= gettext("Ether") %>'
-      }
-    </script>
-    <script defer src="<%= static_path(@conn, "/js/chart-loader.js") %>"></script>
-
     <%= if Enum.at(@conn.path_info, -1) do %>
       <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <% else %>
@@ -37,6 +24,18 @@
     <meta name="theme-color" content="#ffffff">
 
     <%= render_existing(@view_module, "_metatags.html", assigns) || render("_default_title.html") %>
+
+    <script defer>
+      window.localized = {
+        'Blocks Indexed': '<%= gettext("Blocks Indexed") %>',
+        'Block Processing': '<%= gettext("Block Mined, awaiting import...") %>',
+        'Indexing Tokens': '<%= gettext("Indexing Tokens") %>',
+        'Less than': '<%= gettext("Less than") %>',
+        'Market Cap': '<%= gettext("Market Cap") %>',
+        'Price': '<%= gettext("Price") %>',
+        'Ether': '<%= gettext("Ether") %>'
+      }
+    </script>
   </head>
 
   <body>
