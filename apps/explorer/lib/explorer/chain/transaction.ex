@@ -5,7 +5,7 @@ defmodule Explorer.Chain.Transaction do
 
   require Logger
 
-  import Ecto.Query, only: [from: 2, preload: 3, subquery: 1, where: 3, union: 2]
+  import Ecto.Query, only: [from: 2, preload: 3, subquery: 1, where: 3]
 
   alias ABI.FunctionSelector
 
@@ -488,49 +488,22 @@ defmodule Explorer.Chain.Transaction do
   transactions that are linked to the given address_hash through a direction.
   """
   def matching_address_queries_list(query, :from, address_hash) do
-    query_from =
-      from(
-        t in subquery(query),
-        where: t.from_address_hash == ^address_hash
-      )
+    [where(query, [t], t.from_address_hash == ^address_hash)]
   end
 
   def matching_address_queries_list(query, :to, address_hash) do
-    query_to =
-      from(
-        t in subquery(query),
-        where: t.to_address_hash == ^address_hash
-      )
-    query_contract =
-      from(
-        t in subquery(query),
-        where: t.created_contract_address_hash == ^address_hash
-      )
-    united_query = 
-      query_to
-      |> union(^query_contract)
+    [
+      where(query, [t], t.to_address_hash == ^address_hash),
+      where(query, [t], t.created_contract_address_hash == ^address_hash)
+    ]
   end
 
   def matching_address_queries_list(query, _direction, address_hash) do
-    query_to =
-      from(
-        t in query,
-        where: t.to_address_hash == ^address_hash
-      )
-    query_from =
-      from(
-        t in query,
-        where: t.from_address_hash == ^address_hash
-      )
-    query_contract =
-      from(
-        t in query,
-        where: t.created_contract_address_hash == ^address_hash
-      )
-    united_query = 
-      query_to
-      |> union(^query_from)
-      |> union(^query_contract)
+    [
+      where(query, [t], t.from_address_hash == ^address_hash),
+      where(query, [t], t.to_address_hash == ^address_hash),
+      where(query, [t], t.created_contract_address_hash == ^address_hash)
+    ]
   end
 
   @collated_fields ~w(block_number cumulative_gas_used gas_used index)a
