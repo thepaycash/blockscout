@@ -137,9 +137,8 @@ defmodule Explorer.Etherscan do
       )
 
     query
-    |> Chain.where_transaction_has_multiple_internal_transactions()
-    |> InternalTransaction.where_is_different_from_parent_transaction()
     |> where_address_match(address_hash, options)
+    |> InternalTransaction.where_is_different_from_parent_transaction()
     |> where_start_block_match(options)
     |> where_end_block_match(options)
     |> Repo.all()
