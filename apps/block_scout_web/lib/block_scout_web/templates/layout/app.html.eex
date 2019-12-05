@@ -64,7 +64,7 @@
       </main>
       <%= render BlockScoutWeb.LayoutView, "_footer.html", assigns %>
     </div>
-    <script defer src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script defer data-cfasync="false" src="<%= static_path(@conn, "/js/app.js") %>"></script>
     <%= render_existing(@view_module, "scripts.html", assigns) %>
   </body>
 </html>
