@@ -2438,6 +2438,7 @@ defmodule Explorer.Chain do
     |> for_parent_transaction(hash)
     |> join_associations(necessity_by_association)
     |> where_transaction_has_multiple_internal_transactions()
+    |> InternalTransaction.where_is_different_from_parent_transaction()
     |> page_internal_transaction(paging_options)
     |> limit(^paging_options.page_size)
     |> order_by([internal_transaction], asc: internal_transaction.index)
