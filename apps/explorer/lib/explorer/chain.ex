@@ -194,52 +194,57 @@ defmodule Explorer.Chain do
     direction = Keyword.get(options, :direction)
     paging_options = Keyword.get(options, :paging_options, @default_paging_options)
 
-    case direction do
-      nil ->
-        query_to_address_hash_wrapped =
-          InternalTransaction
-          |> InternalTransaction.where_address_fields_match(hash, :to_address_hash)
-          |> common_where_limit_order(paging_options)
-          |> wrapped_union_subquery()
+    if direction == nil do
+      query_to_address_hash_wrapped =
+        InternalTransaction
+        |> InternalTransaction.where_address_fields_match(hash, :to_address_hash)
+        |> common_where_limit_order(paging_options)
+        |> wrapped_union_subquery()
 
-        query_from_address_hash_wrapped =
-          InternalTransaction
-          |> InternalTransaction.where_address_fields_match(hash, :from_address_hash)
-          |> common_where_limit_order(paging_options)
-          |> wrapped_union_subquery()
+      query_from_address_hash_wrapped =
+        InternalTransaction
+        |> InternalTransaction.where_address_fields_match(hash, :from_address_hash)
+        |> common_where_limit_order(paging_options)
+        |> wrapped_union_subquery()
 
-        query_created_contract_address_hash_wrapped =
-          InternalTransaction
-          |> InternalTransaction.where_address_fields_match(hash, :created_contract_address_hash)
-          |> common_where_limit_order(paging_options)
-          |> wrapped_union_subquery()
+      query_created_contract_address_hash_wrapped =
+        InternalTransaction
+        |> InternalTransaction.where_address_fields_match(hash, :created_contract_address_hash)
+        |> common_where_limit_order(paging_options)
+        |> wrapped_union_subquery()
 
+      full_query =
         query_to_address_hash_wrapped
         |> union(^query_from_address_hash_wrapped)
         |> union(^query_created_contract_address_hash_wrapped)
-        |> preload(transaction: :block)
-        |> join_associations(necessity_by_association)
-        |> Repo.all()
 
-      :from ->
-        InternalTransaction
-        |> InternalTransaction.where_address_fields_match(hash, direction)
-        |> common_where_limit_order(paging_options)
-        |> preload(transaction: :block)
-        |> join_associations(necessity_by_association)
-        |> Repo.all()
+      full_wrapped_query =
+        from(
+          q in subquery(full_query),
+          select: q
+        )
 
-      :to ->
-        InternalTransaction
-        |> InternalTransaction.where_address_fields_match(hash, direction)
-        |> common_where_limit_order(paging_options)
-        |> preload(transaction: :block)
-        |> join_associations(necessity_by_association)
-        |> Repo.all()
+      full_wrapped_query
+      |> order_by(
+        [q],
+        desc: q.block_number,
+        desc: q.transaction_index,
+        desc: q.index
+      )
+      |> preload(transaction: :block)
+      |> join_associations(necessity_by_association)
+      |> Repo.all()
+    else
+      InternalTransaction
+      |> InternalTransaction.where_address_fields_match(hash, direction)
+      |> common_where_limit_order(paging_options)
+      |> preload(transaction: :block)
+      |> join_associations(necessity_by_association)
+      |> Repo.all()
     end
   end
 
-  defp wrapped_union_subquery(query) do
+  def wrapped_union_subquery(query) do
     from(
       q in subquery(query),
       select: q
