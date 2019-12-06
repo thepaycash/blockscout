@@ -15,6 +15,7 @@ defmodule Explorer.Chain do
       preload: 2,
       select: 2,
       subquery: 1,
+      union: 2,
       union_all: 2,
       where: 2,
       where: 3
@@ -193,8 +194,60 @@ defmodule Explorer.Chain do
     direction = Keyword.get(options, :direction)
     paging_options = Keyword.get(options, :paging_options, @default_paging_options)
 
-    InternalTransaction
-    |> InternalTransaction.where_address_fields_match(hash, direction)
+    case direction do
+      nil ->
+        query_to_address_hash =
+          InternalTransaction
+          |> InternalTransaction.where_address_fields_match(hash, :to_address_hash)
+          |> common_where_limit_order(paging_options)
+          |> wrapped_union_subquery()
+
+        query_from_address_hash_wrapped =
+          InternalTransaction
+          |> InternalTransaction.where_address_fields_match(hash, :from_address_hash)
+          |> common_where_limit_order(paging_options)
+          |> wrapped_union_subquery()
+
+        query_created_contract_address_hash_wrapped =
+          InternalTransaction
+          |> InternalTransaction.where_address_fields_match(hash, :created_contract_address_hash)
+          |> common_where_limit_order(paging_options)
+          |> wrapped_union_subquery()
+
+        query_created_contract_address_hash_wrapped
+        |> union(^query_from_address_hash_wrapped)
+        |> union(^query_created_contract_address_hash_wrapped)
+        |> preload(transaction: :block)
+        |> join_associations(necessity_by_association)
+        |> Repo.all()
+
+      :from ->
+        InternalTransaction
+        |> InternalTransaction.where_address_fields_match(hash, direction)
+        |> common_where_limit_order(paging_options)
+        |> preload(transaction: :block)
+        |> join_associations(necessity_by_association)
+        |> Repo.all()
+
+      :to ->
+        InternalTransaction
+        |> InternalTransaction.where_address_fields_match(hash, direction)
+        |> common_where_limit_order(paging_options)
+        |> preload(transaction: :block)
+        |> join_associations(necessity_by_association)
+        |> Repo.all()
+    end
+  end
+
+  defp wrapped_union_subquery(query) do
+    from(
+      q in subquery(query),
+      select: q
+    )
+  end
+
+  defp common_where_limit_order(query, paging_options) do
+    query
     |> InternalTransaction.where_is_different_from_parent_transaction()
     |> InternalTransaction.where_block_number_is_not_null()
     |> page_internal_transaction(paging_options)
@@ -205,9 +258,6 @@ defmodule Explorer.Chain do
       desc: it.transaction_index,
       desc: it.index
     )
-    |> preload(transaction: :block)
-    |> join_associations(necessity_by_association)
-    |> Repo.all()
   end
 
   @doc """

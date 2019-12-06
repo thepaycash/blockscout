@@ -89,7 +89,9 @@ defmodule Explorer.Etherscan.Logs do
           internal_transaction.to_address_hash == ^address_hash or
             internal_transaction.from_address_hash == ^address_hash or
             internal_transaction.created_contract_address_hash == ^address_hash,
-        where: (internal_transaction.type == ^:call and internal_transaction.index > 0) or internal_transaction.type != ^:call,
+        where:
+          (internal_transaction.type == ^:call and internal_transaction.index > 0) or
+            internal_transaction.type != ^:call,
         select:
           merge(map(log, ^@log_fields), %{
             gas_price: transaction.gas_price,
