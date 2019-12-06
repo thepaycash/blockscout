@@ -196,7 +196,7 @@ defmodule Explorer.Chain do
 
     case direction do
       nil ->
-        query_to_address_hash =
+        query_to_address_hash_wrapped =
           InternalTransaction
           |> InternalTransaction.where_address_fields_match(hash, :to_address_hash)
           |> common_where_limit_order(paging_options)
@@ -214,7 +214,7 @@ defmodule Explorer.Chain do
           |> common_where_limit_order(paging_options)
           |> wrapped_union_subquery()
 
-        query_created_contract_address_hash_wrapped
+        query_to_address_hash_wrapped
         |> union(^query_from_address_hash_wrapped)
         |> union(^query_created_contract_address_hash_wrapped)
         |> preload(transaction: :block)
