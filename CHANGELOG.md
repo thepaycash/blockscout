@@ -3,15 +3,11 @@
 ### Features
 
 ### Fixes
-- [#2899](https://github.com/poanetwork/blockscout/pull/2899) - fix empty buffered task
-
+- [2910](https://github.com/poanetwork/blockscout/pull/2910) - Reorganize queries and indexes for internal_transactions table
+- [#2906](https://github.com/poanetwork/blockscout/pull/2906) - fix address sum cache
+- [#2902](https://github.com/poanetwork/blockscout/pull/2902) - Offset in blocks retrieval for average block time
 - [#2900](https://github.com/poanetwork/blockscout/pull/2900) - check fetched instance metadata in multiple places
-
-- [2910](https://github.com/poanetwork/blockscout/pull/2910) - Reorganize queries and indexes for internal_transactions table
-
-- [2910](https://github.com/poanetwork/blockscout/pull/2910) - Reorganize queries and indexes for internal_transactions table
-
-- [2910](https://github.com/poanetwork/blockscout/pull/2910) - Reorganize queries and indexes for internal_transactions table
+- [#2899](https://github.com/poanetwork/blockscout/pull/2899) - fix empty buffered task
 
 ### Chore
 
