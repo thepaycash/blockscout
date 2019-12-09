@@ -254,7 +254,6 @@ defmodule Explorer.Chain do
 
   defp common_where_limit_order(query, paging_options) do
     query
-    InternalTransaction
     |> InternalTransaction.where_nonpending_block()
     |> InternalTransaction.where_is_different_from_parent_transaction()
     |> InternalTransaction.where_block_number_is_not_null()
