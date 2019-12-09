@@ -23,9 +23,9 @@ defmodule Explorer.Repo.Migrations.AddPendingInternalTxsOperation do
       remove(:internal_transactions_indexed_at)
     end
 
-    alter table(:transactions) do
-      remove(:internal_transactions_indexed_at)
-    end
+    # alter table(:transactions) do
+    #   remove(:internal_transactions_indexed_at)
+    # end
 
     alter table(:internal_transactions) do
       add(:block_hash, :bytea)
