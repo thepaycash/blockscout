@@ -5,7 +5,7 @@ defmodule Indexer.Supervisor do
 
   use Supervisor
 
-  alias Indexer.Block
+  alias Indexer.{Block, PendingOpsCleaner}
   alias Indexer.Block.{Catchup, Realtime}
 
   alias Indexer.Fetcher.{
@@ -133,9 +133,7 @@ defmodule Indexer.Supervisor do
          [[json_rpc_named_arguments: json_rpc_named_arguments, memory_monitor: memory_monitor]]},
         {BlocksTransactionsMismatch.Supervisor,
          [[json_rpc_named_arguments: json_rpc_named_arguments, memory_monitor: memory_monitor]]},
-        {DoubleTokenTransfers.Supervisor, [[memory_monitor: memory_monitor]]},
-        {MissingTokenTransfers.Supervisor, [[memory_monitor: memory_monitor]]},
-        {InternalTransactionsBlockNumber.Supervisor, [[memory_monitor: memory_monitor]]}
+        {PendingOpsCleaner, [[], []]}
       ],
       strategy: :one_for_one
     )
