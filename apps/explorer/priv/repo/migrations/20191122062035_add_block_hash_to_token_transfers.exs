@@ -2,9 +2,9 @@ defmodule Explorer.Repo.Migrations.AddBlockHashToTokenTransfers do
   use Ecto.Migration
 
   def change do
-  #   alter table(:token_transfers) do
-  #     add(:block_hash, :bytea)
-  #   end
+    #   alter table(:token_transfers) do
+    #     add(:block_hash, :bytea)
+    #   end
 
     # execute("""
     # UPDATE token_transfers token_transfer
