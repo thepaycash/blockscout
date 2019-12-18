@@ -3,6 +3,7 @@
 ### Features
 
 ### Fixes
+- [#2915](https://github.com/poanetwork/blockscout/pull/2915) - Speedup of blocks_without_reward_query
 - [#2914](https://github.com/poanetwork/blockscout/pull/2914) - Reduce execution time of stream_unfetched_token_instances query
 - [#2910](https://github.com/poanetwork/blockscout/pull/2910) - Reorganize queries and indexes for internal_transactions table
 - [#2906](https://github.com/poanetwork/blockscout/pull/2906) - fix address sum cache

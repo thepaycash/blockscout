@@ -124,7 +124,7 @@ defmodule Explorer.Chain.Block do
     validator_rewards =
       from(
         r in Reward,
-        where: r.address_type == "validator"
+        where: r.address_type == ^"validator"
       )
 
     from(
