@@ -1,9 +1,11 @@
 ## Current
 
 ### Features
+- [#2835](https://github.com/poanetwork/blockscout/pull/2835), [#2871](https://github.com/poanetwork/blockscout/pull/2871), [#2872](https://github.com/poanetwork/blockscout/pull/2872), [#2886](https://github.com/poanetwork/blockscout/pull/2886), [#2925](https://github.com/poanetwork/blockscout/pull/2925) - Add "block_hash" to logs, token_transfers and internal transactions and "pending blocks operations" approach
 - [#2918](https://github.com/poanetwork/blockscout/pull/2918) - Add tokenID for tokentx API action
 
 ### Fixes
+- [#2928](https://github.com/poanetwork/blockscout/pull/2928) - Speedup pending block ops int txs to fetch query
 - [#2924](https://github.com/poanetwork/blockscout/pull/2924) - Speedup address to logs query
 - [#2915](https://github.com/poanetwork/blockscout/pull/2915) - Speedup of blocks_without_reward_query
 - [#2914](https://github.com/poanetwork/blockscout/pull/2914) - Reduce execution time of stream_unfetched_token_instances query
@@ -41,8 +43,6 @@
 - [#2830](https://github.com/poanetwork/blockscout/pull/2830) - Fix wrong color of contract icon on xDai chain
 - [#2829](https://github.com/poanetwork/blockscout/pull/2829) - Fix for stuck gas limit label and value
 - [#2828](https://github.com/poanetwork/blockscout/pull/2828) - Fix for script that clears compilation/launching assets
-- [#2872](https://github.com/poanetwork/blockscout/pull/2872) - do not remove token transfers
-- [#2871](https://github.com/poanetwork/blockscout/pull/2871) - do not remove logs
 - [#2800](https://github.com/poanetwork/blockscout/pull/2800) - return not found for not verified contract for token read_contract
 - [#2806](https://github.com/poanetwork/blockscout/pull/2806) - Fix blocks fetching on the main page
 - [#2803](https://github.com/poanetwork/blockscout/pull/2803) - Fix block validator custom tooltip
@@ -59,7 +59,6 @@
 - [#2844](https://github.com/poanetwork/blockscout/pull/2844) - Extend external reward types up to 20
 - [#2827](https://github.com/poanetwork/blockscout/pull/2827) - Node js 12.13.0 (latest LTS release) support
 - [#2818](https://github.com/poanetwork/blockscout/pull/2818) - allow hiding marketcap percentage
-- [#2835](https://github.com/poanetwork/blockscout/pull/2835) - Update int txs constraints repairing script
 - [#2817](https://github.com/poanetwork/blockscout/pull/2817) - move docker integration documentation to blockscout docs
 - [#2808](https://github.com/poanetwork/blockscout/pull/2808) - Add tooltip for tx input
 - [#2807](https://github.com/poanetwork/blockscout/pull/2807) - 422 page
