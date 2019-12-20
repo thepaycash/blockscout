@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/app.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/app.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/app" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/async_listing_load.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/async_listing_load.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/async_listing_load" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/awesomplete-util.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/awesomplete-util.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/awesomplete-util" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/awesomplete.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/awesomplete.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/awesomplete" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/card_tabs.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/card_tabs.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/card_tabs" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/clipboard_buttons.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/clipboard_buttons.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/clipboard_buttons" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/coin_balance_history_chart.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/coin_balance_history_chart.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/coin_balance_history_chart" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/currency.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/currency.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/currency" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/from_now.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/from_now.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/from_now" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/indexing.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/indexing.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/indexing" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/infinite_scroll_helpers.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/infinite_scroll_helpers.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/infinite_scroll_helpers" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/list_morph.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/list_morph.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/list_morph" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/loading_element.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/loading_element.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/loading_element" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="1" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/market_history_chart.js">
+<testcase time="0" name="org.eslint.semi" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/market_history_chart"><failure message="Extra semicolon."><![CDATA[line 103, col 14, Error - Extra semicolon. (semi)]]></failure></testcase>
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/modals.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/modals.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/modals" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/network_selector.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/network_selector.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/network_selector" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/pending_transactions_toggle.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/pending_transactions_toggle.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/pending_transactions_toggle" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/pretty_json.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/pretty_json.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/pretty_json" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/redux_helpers.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/redux_helpers.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/redux_helpers" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/reload_button.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/reload_button.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/reload_button" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/smart_contract/read_only_functions.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/smart_contract/read_only_functions.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/smart_contract/read_only_functions" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/smart_contract/wei_ether_converter.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/smart_contract/wei_ether_converter.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/smart_contract/wei_ether_converter" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/stop_propagation.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/stop_propagation.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/stop_propagation" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_balance_dropdown.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_balance_dropdown.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_balance_dropdown" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_balance_dropdown_search.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_balance_dropdown_search.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_balance_dropdown_search" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_transfers_toggle.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_transfers_toggle.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/token_transfers_toggle" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/tooltip.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/tooltip.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/tooltip" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/transaction_input_dropdown.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/transaction_input_dropdown.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/transaction_input_dropdown" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/try_api.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/try_api.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/try_api" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/try_eth_api.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/try_eth_api.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/try_eth_api" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/utils.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/utils.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/lib/utils" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/locale.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/locale.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/locale" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/coin_balances.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/coin_balances.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/coin_balances" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/internal_transactions.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/internal_transactions.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/internal_transactions" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/logs.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/logs.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/logs" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/transactions.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/transactions.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/transactions" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/validations.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/validations.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address/validations" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/address" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/admin/tasks.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/admin/tasks.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/admin/tasks" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/blocks.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/blocks.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/blocks" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/chain.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/chain.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/chain" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/dark-mode-switcher.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/dark-mode-switcher.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/dark-mode-switcher" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/favorites.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/favorites.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/favorites" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/layout.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/layout.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/layout" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/network-search.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/network-search.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/network-search" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/pending_transactions.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/pending_transactions.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/pending_transactions" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/stakes.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/stakes.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/stakes" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/token_counters.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/token_counters.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/token_counters" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/transaction.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/transaction.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/transaction" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/transactions.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/transactions.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/transactions" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/verification_form.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/verification_form.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/pages/verification_form" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/socket.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/socket.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/socket" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/view_specific/address_contract/code_highlighting.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/view_specific/address_contract/code_highlighting.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/view_specific/address_contract/code_highlighting" />
+</testsuite>
+<testsuite package="org.eslint" time="0" tests="1" errors="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/view_specific/raw_trace/code_highlighting.js">
+<testcase time="0" name="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/view_specific/raw_trace/code_highlighting.js" classname="/Users/maxalekseenko/Documents/work/poa/blockscout/apps/block_scout_web/assets/js/view_specific/raw_trace/code_highlighting" />
+</testsuite>
+</testsuites>
