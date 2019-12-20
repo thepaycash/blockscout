@@ -1,6 +1,7 @@
 ## Current
 
 ### Features
+- [#2918](https://github.com/poanetwork/blockscout/pull/2918) - Add tokenID for tokentx API action
 
 ### Fixes
 - [#2924](https://github.com/poanetwork/blockscout/pull/2924) - Speedup address to logs query
