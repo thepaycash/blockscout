@@ -234,8 +234,8 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
 
     Logger.info(fn ->
       [
-        "consensus removing required_tuples: ",
-        inspect(required_tuples)
+        "consensus removing transaction_tuples: ",
+        inspect(transaction_tuples)
       ]
     end)
 
