@@ -50,6 +50,14 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
     # filter out params with just `block_number` (indicating blocks without internal transactions)
     internal_transactions_params = Enum.filter(changes_list, &Map.has_key?(&1, :type))
 
+    Logger.info(fn ->
+      [
+        "consensus removing changes_list and internal_transactions_params: ",
+        inspect(changes_list),
+        inspect(internal_transactions_params)
+      ]
+    end)
+
     # Enforce ShareLocks tables order (see docs: sharelocks.md)
     multi
     |> Multi.run(:acquire_blocks, fn repo, _ ->
@@ -230,6 +238,13 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
     # - there are no transactions for some internal transactions
     # - there are internal txs with a different block number than their transactions
     # Returns block numbers where any of these issues is found
+
+    Logger.info(fn ->
+      [
+        "consensus removing transactions: ",
+        inspect(transactions)
+      ]
+    end)
 
     required_tuples = MapSet.new(transactions, &{&1.hash, &1.block_number})
 
