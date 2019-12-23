@@ -365,6 +365,14 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
   end
 
   defp remove_consensus_of_invalid_blocks(repo, invalid_block_numbers) do
+    Logger.debug(fn ->
+      [
+        "consensus removing from blocks with numbers: ",
+        inspect(invalid_block_numbers),
+        " because of mismatching transactions"
+      ]
+    end)
+
     update_query =
       from(
         b in Block,
@@ -377,7 +385,7 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
     try do
       {_num, result} = repo.update_all(update_query, [])
 
-      Logger.info(fn ->
+      Logger.debug(fn ->
         [
           "consensus removed from blocks with numbers: ",
           inspect(invalid_block_numbers),

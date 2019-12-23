@@ -289,6 +289,14 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
         lock: "FOR UPDATE"
       )
 
+    Logger.debug(fn ->
+      [
+        "consensus removing from blocks with hashes from blocks runner: ",
+        inspect(consensus_block_numbers),
+        inspect(hashes)
+      ]
+    end)
+
     {_, removed_consensus_block_hashes} =
       repo.update_all(
         from(
@@ -303,7 +311,7 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
         timeout: timeout
       )
 
-    Logger.info(fn ->
+    Logger.debug(fn ->
       [
         "consensus removed from blocks with hashes from blocks runner: ",
         inspect(removed_consensus_block_hashes)
