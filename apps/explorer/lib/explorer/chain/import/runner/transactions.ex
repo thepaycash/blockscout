@@ -187,7 +187,7 @@ defmodule Explorer.Chain.Import.Runner.Transactions do
     if Enum.empty?(block_hashes) do
       {:ok, []}
     else
-      Logger.debug(fn ->
+      Logger.info(fn ->
         [
           "consensus removing from blocks with hashes from transactions runner: ",
           inspect(block_hashes)
@@ -211,7 +211,7 @@ defmodule Explorer.Chain.Import.Runner.Transactions do
             timeout: timeout
           )
 
-        Logger.debug(fn ->
+        Logger.info(fn ->
           [
             "consensus removed from blocks with hashes from transactions runner: ",
             inspect(result)
