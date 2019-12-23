@@ -248,8 +248,6 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
       ]
     end)
 
-    all_tuples = MapSet.union(required_tuples, candidate_tuples)
-
     common_tuples = MapSet.intersection(candidate_tuples, transaction_tuples)
 
     invalid_numbers =
