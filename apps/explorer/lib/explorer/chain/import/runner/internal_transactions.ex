@@ -377,7 +377,7 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
     try do
       {_num, result} = repo.update_all(update_query, [])
 
-      Logger.debug(fn ->
+      Logger.info(fn ->
         [
           "consensus removed from blocks with numbers: ",
           inspect(invalid_block_numbers),

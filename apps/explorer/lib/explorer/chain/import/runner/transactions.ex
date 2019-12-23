@@ -204,7 +204,7 @@ defmodule Explorer.Chain.Import.Runner.Transactions do
             timeout: timeout
           )
 
-        Logger.debug(fn ->
+        Logger.info(fn ->
           [
             "consensus removed from blocks with hashes from transactions runner: ",
             inspect(result)
