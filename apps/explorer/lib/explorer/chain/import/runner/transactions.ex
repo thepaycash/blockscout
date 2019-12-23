@@ -203,6 +203,13 @@ defmodule Explorer.Chain.Import.Runner.Transactions do
             timeout: timeout
           )
 
+        Logger.debug(fn ->
+          [
+            "consensus removed from blocks with hashes from transactions runner: ",
+            inspect(result)
+          ]
+        end)
+
         {:ok, result}
       rescue
         postgrex_error in Postgrex.Error ->

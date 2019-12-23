@@ -82,7 +82,7 @@ defmodule Indexer.Block.Catchup.Fetcher do
           {:ok, number}
       end
 
-      case latest_block_number do
+    case latest_block_number do
       # let realtime indexer get the genesis block
       0 ->
         %{first_block_number: 0, missing_block_count: 0, last_block_number: 0, shrunk: false}

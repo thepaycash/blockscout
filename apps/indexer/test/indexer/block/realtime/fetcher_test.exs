@@ -424,5 +424,4 @@ defmodule Indexer.Block.Realtime.FetcherTest do
               }} = Indexer.Block.Fetcher.fetch_and_import_range(block_fetcher, 3_946_079..3_946_080)
     end
   end
-
 end

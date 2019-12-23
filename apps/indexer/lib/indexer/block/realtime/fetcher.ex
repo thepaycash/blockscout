@@ -217,7 +217,6 @@ defmodule Indexer.Block.Realtime.Fetcher do
       args = [block_number_to_fetch, block_fetcher, reorg?(number, max_number_seen)]
       Task.Supervisor.start_child(TaskSupervisor, __MODULE__, :fetch_and_import_block, args)
     end
-
   end
 
   defp determine_start_at(number, nil, nil), do: number
