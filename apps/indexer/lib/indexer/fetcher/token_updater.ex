@@ -53,7 +53,7 @@ defmodule Indexer.Fetcher.TokenUpdater do
 
   @impl BufferedTask
   def run(entries, _json_rpc_named_arguments) do
-    Logger.debug("updating tokens")
+    Logger.debug("updating tokens", count: Enum.count(entries))
 
     entries
     |> Enum.map(&to_string/1)
