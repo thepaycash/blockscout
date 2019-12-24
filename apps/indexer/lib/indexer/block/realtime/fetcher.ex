@@ -261,6 +261,7 @@ defmodule Indexer.Block.Realtime.Fetcher do
 
   @decorate span(tracer: Tracer)
   defp do_fetch_and_import_block(block_number_to_fetch, block_fetcher, retry) do
+    Logger.debug("Started fetching and importing...")
     case fetch_and_import_range(block_fetcher, block_number_to_fetch..block_number_to_fetch) do
       {:ok, %{inserted: _, errors: []}} ->
         Logger.debug("Fetched and imported.")
