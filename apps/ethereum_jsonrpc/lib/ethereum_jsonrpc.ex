@@ -182,12 +182,14 @@ defmodule EthereumJSONRPC do
         ) :: {:ok, FetchedBalances.t()} | {:error, reason :: term}
   def fetch_balances(params_list, json_rpc_named_arguments)
       when is_list(params_list) and is_list(json_rpc_named_arguments) do
+    Logger.debug("#blocks_importer#: Fetching balances")
     id_to_params = id_to_params(params_list)
 
     with {:ok, responses} <-
            id_to_params
            |> FetchedBalances.requests()
            |> json_rpc(json_rpc_named_arguments) do
+      Logger.debug("#blocks_importer#: Balances fetched")
       {:ok, FetchedBalances.from_responses(responses, id_to_params)}
     end
   end
