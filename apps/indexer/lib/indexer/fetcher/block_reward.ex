@@ -210,6 +210,8 @@ defmodule Indexer.Fetcher.BlockReward do
   end
 
   def reduce_uncle_rewards(beneficiaries_params) do
+    Logger.debug("#blocks_importer#: Reducing uncles rewards")
+
     beneficiaries_params
     |> Enum.reduce([], fn %{address_type: address_type} = beneficiary, acc ->
       current =

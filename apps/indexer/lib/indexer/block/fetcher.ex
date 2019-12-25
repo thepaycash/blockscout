@@ -173,10 +173,16 @@ defmodule Indexer.Block.Fetcher do
              }
            ) do
       result = {:ok, %{inserted: inserted, errors: blocks_errors}}
+
+      Logger.debug("#blocks_importer#: Updating cache")
+
       update_block_cache(inserted[:blocks])
       update_transactions_cache(inserted[:transactions], inserted[:fork_transactions])
       update_addresses_cache(inserted[:addresses])
       update_uncles_cache(inserted[:block_second_degree_relations])
+
+      Logger.debug("#blocks_importer#: Cache updated")
+
       result
     else
       {step, {:error, reason}} -> {:error, {step, reason}}
@@ -333,6 +339,7 @@ defmodule Indexer.Block.Fetcher do
   end
 
   defp fetch_beneficiaries(blocks, json_rpc_named_arguments) do
+    Logger.debug("#blocks_importer#: Fetching beneficiaries")
     hash_string_by_number =
       Enum.into(blocks, %{}, fn %{number: number, hash: hash_string}
                                 when is_integer(number) and is_binary(hash_string) ->
@@ -345,6 +352,8 @@ defmodule Indexer.Block.Fetcher do
     |> case do
       {:ok, %FetchedBeneficiaries{params_set: params_set} = fetched_beneficiaries} ->
         consensus_params_set = consensus_params_set(params_set, hash_string_by_number)
+
+        Logger.debug("#blocks_importer#: Beneficiaries fetched")
 
         %FetchedBeneficiaries{fetched_beneficiaries | params_set: consensus_params_set}
 

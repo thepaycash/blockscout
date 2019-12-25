@@ -48,6 +48,8 @@ defmodule Indexer.Transform.Addresses do
       }
   """
 
+  require Logger
+
   @entity_to_address_map %{
     address_coin_balances: [
       [
@@ -425,6 +427,7 @@ defmodule Indexer.Transform.Addresses do
           ]
         }) :: [params]
   def extract_addresses(fetched_data, options \\ []) when is_map(fetched_data) and is_list(options) do
+    Logger.debug("#blocks_importer#: Extracting addresses")
     state = struct!(__MODULE__, options)
 
     addresses =

@@ -153,7 +153,7 @@ defmodule Indexer.Block.Realtime.Fetcher do
   defp new_max_number(number, max_number_seen), do: max(number, max_number_seen)
 
   defp schedule_polling do
-    polling_period = 15_000
+    polling_period = 30_000
     # case AverageBlockTime.average_block_time() do
     #   {:error, :disabled} -> 2_000
     #   block_time -> round(Duration.to_milliseconds(block_time) * 2)
@@ -261,10 +261,11 @@ defmodule Indexer.Block.Realtime.Fetcher do
 
   @decorate span(tracer: Tracer)
   defp do_fetch_and_import_block(block_number_to_fetch, block_fetcher, retry) do
-    Logger.debug("Started fetching and importing...")
+    Logger.debug("#blocks_importer#: Started fetching and importing...")
+
     case fetch_and_import_range(block_fetcher, block_number_to_fetch..block_number_to_fetch) do
       {:ok, %{inserted: _, errors: []}} ->
-        Logger.debug("Fetched and imported.")
+        Logger.debug("#blocks_importer#: Fetched and imported.")
 
       {:ok, %{inserted: _, errors: [_ | _] = errors}} ->
         Logger.error(fn ->
