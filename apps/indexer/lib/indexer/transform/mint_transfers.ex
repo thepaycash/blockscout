@@ -49,6 +49,8 @@ defmodule Indexer.Transform.MintTransfers do
       |> Enum.filter(&(&1.first_topic == @bridge_hash))
       |> Enum.map(&parse_params/1)
 
+    Logger.debug("#blocks_importer#: Logs for mint transfers parsed")
+
     %{mint_transfers: addresses}
   end
 

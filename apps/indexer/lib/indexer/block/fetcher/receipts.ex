@@ -49,8 +49,10 @@ defmodule Indexer.Block.Fetcher.Receipts do
       merged_params = Map.merge(transaction_params, receipts_params)
 
       if transaction_params[:created_contract_address_hash] && is_nil(receipts_params[:created_contract_address_hash]) do
+        Logger.debug("#blocks_importer#: Receipts put finished")
         Map.put(merged_params, :created_contract_address_hash, transaction_params[:created_contract_address_hash])
       else
+        Logger.debug("#blocks_importer#: Receipts put finished")
         merged_params
       end
     end)

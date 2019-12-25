@@ -219,6 +219,8 @@ defmodule Indexer.Block.Fetcher do
         options
       )
       when is_map(options) do
+    Logger.debug("#blocks_importer#: Importing...")
+
     {address_hash_to_fetched_balance_block_number, import_options} =
       pop_address_hash_to_fetched_balance_block_number(options)
 
@@ -231,6 +233,7 @@ defmodule Indexer.Block.Fetcher do
         }
       )
 
+    Logger.debug("#blocks_importer#: Just before import")
     callback_module.import(state, options_with_broadcast)
   end
 
