@@ -218,7 +218,12 @@ defmodule EthereumJSONRPC do
           {:ok, FetchedBeneficiaries.t()} | {:error, reason :: term} | :ignore
   def fetch_beneficiaries(block_numbers, json_rpc_named_arguments) when is_list(block_numbers) do
     Logger.debug("#blocks_importer#: Fetching beneficiaries")
-    Keyword.fetch!(json_rpc_named_arguments, :variant).fetch_beneficiaries(block_numbers, json_rpc_named_arguments)
+
+    fetched_beneficiaries =
+      Keyword.fetch!(json_rpc_named_arguments, :variant).fetch_beneficiaries(block_numbers, json_rpc_named_arguments)
+
+    Logger.debug("#blocks_importer#: Beneficiaries fetched")
+    fetched_beneficiaries
   end
 
   @doc """

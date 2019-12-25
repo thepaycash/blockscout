@@ -340,6 +340,7 @@ defmodule Indexer.Block.Fetcher do
 
   defp fetch_beneficiaries(blocks, json_rpc_named_arguments) do
     Logger.debug("#blocks_importer#: Fetching beneficiaries")
+
     hash_string_by_number =
       Enum.into(blocks, %{}, fn %{number: number, hash: hash_string}
                                 when is_integer(number) and is_binary(hash_string) ->
@@ -406,6 +407,7 @@ defmodule Indexer.Block.Fetcher do
   end
 
   defp add_gas_payments(beneficiaries, transactions) do
+    Logger.debug("#blocks_importer#: Adding gas payments")
     transactions_by_block_number = Enum.group_by(transactions, & &1.block_number)
 
     Enum.map(beneficiaries, fn beneficiary ->
@@ -416,9 +418,12 @@ defmodule Indexer.Block.Fetcher do
           "0x" <> minted_hex = beneficiary.reward
           {minted, _} = Integer.parse(minted_hex, 16)
 
+          Logger.debug("#blocks_importer#: Gas payments added")
+
           %{beneficiary | reward: minted + gas_payment}
 
         _ ->
+          Logger.debug("#blocks_importer#: Gas payments added")
           beneficiary
       end
     end)
