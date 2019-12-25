@@ -12,7 +12,8 @@ defmodule Explorer.Chain.Import.Stage.BlockReferencing do
   @impl Stage
   def runners,
     do: [
-      Runner.Transactions
+      Runner.Transactions,
+      Runner.Transaction.Forks
     ]
 
   @impl Stage

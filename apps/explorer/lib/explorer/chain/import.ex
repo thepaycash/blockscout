@@ -14,10 +14,9 @@ defmodule Explorer.Chain.Import do
     Import.Stage.Addresses,
     Import.Stage.AddressReferencing,
     Import.Stage.BlockReferencing,
-    Import.Stage.BlockTransactionForks,
+    Import.Stage.BlockTokens,
     Import.Stage.BlockAddressTokenBalances,
     Import.Stage.BlockLogs,
-    Import.Stage.BlockTokens,
     Import.Stage.BlockTokenTransfers,
     Import.Stage.BlockFollowing,
     Import.Stage.BlockPending
