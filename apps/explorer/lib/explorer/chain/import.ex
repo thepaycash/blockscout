@@ -352,6 +352,7 @@ defmodule Explorer.Chain.Import do
 
   defp import_transaction(multi, options) when is_map(options) do
     Logger.debug("#blocks_importer#: import_transaction starting...")
+    Logger.debug(inspect(multi))
     Repo.logged_transaction(multi, timeout: Map.get(options, :timeout, @transaction_timeout))
   end
 
