@@ -275,6 +275,7 @@ defmodule Explorer.Chain.Import do
 
   defp runner_to_changes_list_to_multis(runner_to_changes_list, options)
        when is_map(runner_to_changes_list) and is_map(options) do
+    Logger.debug("#blocks_importer#: runner_to_changes_list_to_multis starting...")
     timestamps = timestamps()
     full_options = Map.put(options, :timestamps, timestamps)
 
@@ -327,6 +328,7 @@ defmodule Explorer.Chain.Import do
   end
 
   defp logged_import(multis, options) when is_list(multis) and is_map(options) do
+    Logger.debug("#blocks_importer#: logged_import starting...")
     import_id = :erlang.unique_integer([:positive])
 
     Explorer.Logger.metadata(fn -> import_transactions(multis, options) end, import_id: import_id)
