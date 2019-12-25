@@ -14,6 +14,9 @@ defmodule Explorer.Chain.Import do
     Import.Stage.Addresses,
     Import.Stage.AddressReferencing,
     Import.Stage.BlockReferencing,
+    Import.Stage.BlockLogs,
+    Import.Stage.BlockTokens,
+    Import.Stage.BlockTokenTransfers,
     Import.Stage.BlockFollowing,
     Import.Stage.BlockPending
   ]
@@ -336,6 +339,7 @@ defmodule Explorer.Chain.Import do
 
   defp import_transactions(multis, options) when is_list(multis) and is_map(options) do
     Logger.debug("#blocks_importer#: import_transactions starting...")
+
     Enum.reduce_while(multis, {:ok, %{}}, fn multi, {:ok, acc_changes} ->
       case import_transaction(multi, options) do
         {:ok, changes} -> {:cont, {:ok, Map.merge(acc_changes, changes)}}
@@ -352,7 +356,7 @@ defmodule Explorer.Chain.Import do
 
   defp import_transaction(multi, options) when is_map(options) do
     Logger.debug("#blocks_importer#: import_transaction starting...")
-    Logger.debug(inspect(multi))
+    Logger.debug(fn -> ["#blocks_importer#: ", inspect(multi)] end)
     Repo.logged_transaction(multi, timeout: Map.get(options, :timeout, @transaction_timeout))
   end
 

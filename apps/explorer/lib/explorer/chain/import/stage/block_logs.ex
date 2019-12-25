@@ -1,4 +1,4 @@
-defmodule Explorer.Chain.Import.Stage.BlockReferencing do
+defmodule Explorer.Chain.Import.Stage.BlockLogs do
   @moduledoc """
   Imports any tables that reference `t:Explorer.Chain.Block.t/0` and that were
   imported by `Explorer.Chain.Import.Stage.Addresses` and
@@ -12,9 +12,7 @@ defmodule Explorer.Chain.Import.Stage.BlockReferencing do
   @impl Stage
   def runners,
     do: [
-      Runner.Transactions,
-      Runner.Transaction.Forks,
-      Runner.Address.TokenBalances
+      Runner.Logs
     ]
 
   @impl Stage
