@@ -3,6 +3,8 @@ defmodule Explorer.Chain.Import do
   Bulk importing of data into `Explorer.Repo`
   """
 
+  require Logger
+
   alias Ecto.Changeset
   alias Explorer.Chain.Events.Publisher
   alias Explorer.Chain.Import
@@ -126,25 +128,32 @@ defmodule Explorer.Chain.Import do
          {:ok, valid_runner_option_pairs} <- validate_runner_options_pairs(runner_options_pairs),
          {:ok, runner_to_changes_list} <- runner_to_changes_list(valid_runner_option_pairs),
          {:ok, data} <- insert_runner_to_changes_list(runner_to_changes_list, options) do
+      Logger.debug("#blocks_importer#: importing all (before broadcast)...")
       Publisher.broadcast(data, Map.get(options, :broadcast, false))
       {:ok, data}
     end
   end
 
   defp runner_to_changes_list(runner_options_pairs) when is_list(runner_options_pairs) do
+    Logger.debug("#blocks_importer#: runner_to_changes_list starting...")
+
     runner_options_pairs
     |> Stream.map(fn {runner, options} -> runner_changes_list(runner, options) end)
     |> Enum.reduce({:ok, %{}}, fn
       {:ok, {runner, changes_list}}, {:ok, acc_runner_to_changes_list} ->
+        Logger.debug("#blocks_importer#: runner_to_changes_list finished")
         {:ok, Map.put(acc_runner_to_changes_list, runner, changes_list)}
 
       {:ok, _}, {:error, _} = error ->
+        Logger.debug("#blocks_importer#: runner_to_changes_list finished")
         error
 
       {:error, _} = error, {:ok, _} ->
+        Logger.debug("#blocks_importer#: runner_to_changes_list finished")
         error
 
       {:error, runner_changesets}, {:error, acc_changesets} ->
+        Logger.debug("#blocks_importer#: runner_to_changes_list finished")
         {:error, acc_changesets ++ runner_changesets}
     end)
   end
@@ -200,6 +209,8 @@ defmodule Explorer.Chain.Import do
   end
 
   defp validate_runner_options_pairs(runner_options_pairs) when is_list(runner_options_pairs) do
+    Logger.debug("#blocks_importer#: validate_runner_options_pairs starting...")
+
     {status, reversed} =
       runner_options_pairs
       |> Stream.map(fn {runner, options} -> validate_runner_options(runner, options) end)
@@ -220,6 +231,7 @@ defmodule Explorer.Chain.Import do
           {:error, [reason | reasons]}
       end)
 
+    Logger.debug("#blocks_importer#: validate_runner_options_pairs finished")
     {status, Enum.reverse(reversed)}
   end
 
@@ -303,9 +315,15 @@ defmodule Explorer.Chain.Import do
   end
 
   defp insert_runner_to_changes_list(runner_to_changes_list, options) when is_map(runner_to_changes_list) do
-    runner_to_changes_list
-    |> runner_to_changes_list_to_multis(options)
-    |> logged_import(options)
+    Logger.debug("#blocks_importer#: insert_runner_to_changes_list starting...")
+
+    inserted_runner_to_changes_list =
+      runner_to_changes_list
+      |> runner_to_changes_list_to_multis(options)
+      |> logged_import(options)
+
+    Logger.debug("#blocks_importer#: insert_runner_to_changes_list finished")
+    inserted_runner_to_changes_list
   end
 
   defp logged_import(multis, options) when is_list(multis) and is_map(options) do
