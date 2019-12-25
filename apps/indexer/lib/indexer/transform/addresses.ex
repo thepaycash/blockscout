@@ -435,9 +435,14 @@ defmodule Indexer.Transform.Addresses do
           (entity_items = Map.get(fetched_data, entity_key)) != nil,
           do: extract_addresses_from_collection(entity_items, entity_fields, state)
 
+    extracted_addresses = 
     addresses
     |> List.flatten()
     |> merge_addresses()
+
+    Logger.debug("#blocks_importer#: Addresses extracted")
+
+    extracted_addresses
   end
 
   def extract_addresses_from_collection(items, fields, state),
