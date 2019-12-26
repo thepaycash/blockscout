@@ -1,4 +1,4 @@
-defmodule Explorer.Chain.Import.Stage.BlockReferencing do
+defmodule Explorer.Chain.Import.Stage.Transactions do
   @moduledoc """
   Imports any tables that reference `t:Explorer.Chain.Block.t/0` and that were
   imported by `Explorer.Chain.Import.Stage.Addresses` and

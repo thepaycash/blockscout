@@ -10,28 +10,45 @@ defmodule Explorer.Chain.Import do
   alias Explorer.Chain.Import
   alias Explorer.Repo
 
-  @stages [
+  @basic_stages [
     Import.Stage.Addresses,
     Import.Stage.AddressReferencing,
-    Import.Stage.BlockReferencing,
+    Import.Stage.Transactions,
+    Import.Stage.BlockPending
+  ]
+
+  @other_stages [
     Import.Stage.BlockTokens,
     Import.Stage.BlockAddressTokenBalances,
     Import.Stage.BlockLogs,
     Import.Stage.BlockTokenTransfers,
-    Import.Stage.BlockFollowing,
-    Import.Stage.BlockPending
+    Import.Stage.BlockFollowing
+  ]
+
+  @all_stages [
+    Import.Stage.Addresses,
+    Import.Stage.AddressReferencing,
+    Import.Stage.Transactions,
+    Import.Stage.BlockPending,
+    Import.Stage.BlockTokens,
+    Import.Stage.BlockAddressTokenBalances,
+    Import.Stage.BlockLogs,
+    Import.Stage.BlockTokenTransfers,
+    Import.Stage.BlockFollowing
   ]
 
   # in order so that foreign keys are inserted before being referenced
-  @runners Enum.flat_map(@stages, fn stage -> stage.runners() end)
+  @basic_runners Enum.flat_map(@basic_stages, fn stage -> stage.runners() end)
+  @other_runners Enum.flat_map(@other_stages, fn stage -> stage.runners() end)
+  @all_runners Enum.flat_map(@all_stages, fn stage -> stage.runners() end)
 
   quoted_runner_option_value =
     quote do
       Import.Runner.options()
     end
 
-  quoted_runner_options =
-    for runner <- @runners do
+  quoted_all_runner_options =
+    for runner <- @all_runners do
       quoted_key =
         quote do
           optional(unquote(runner.option_key()))
@@ -43,11 +60,11 @@ defmodule Explorer.Chain.Import do
   @type all_options :: %{
           optional(:broadcast) => atom,
           optional(:timeout) => timeout,
-          unquote_splicing(quoted_runner_options)
+          unquote_splicing(quoted_all_runner_options)
         }
 
-  quoted_runner_imported =
-    for runner <- @runners do
+  quoted_all_runner_imported =
+    for runner <- @all_runners do
       quoted_key =
         quote do
           optional(unquote(runner.option_key()))
@@ -62,7 +79,7 @@ defmodule Explorer.Chain.Import do
     end
 
   @type all_result ::
-          {:ok, %{unquote_splicing(quoted_runner_imported)}}
+          {:ok, %{unquote_splicing(quoted_all_runner_imported)}}
           | {:error, [Changeset.t()] | :timeout}
           | {:error, step :: Ecto.Multi.name(), failed_value :: any(),
              changes_so_far :: %{optional(Ecto.Multi.name()) => any()}}
@@ -72,7 +89,7 @@ defmodule Explorer.Chain.Import do
   # milliseconds
   @transaction_timeout :timer.minutes(4)
 
-  @imported_table_rows @runners
+  @imported_table_rows @all_runners
                        |> Stream.map(&Map.put(&1.imported_table_row(), :key, &1.option_key()))
                        |> Enum.map_join("\n", fn %{
                                                    key: key,
@@ -81,7 +98,7 @@ defmodule Explorer.Chain.Import do
                                                  } ->
                          "| `#{inspect(key)}` | `#{value_type}` | #{value_description} |"
                        end)
-  @runner_options_doc Enum.map_join(@runners, fn runner ->
+  @runner_options_doc Enum.map_join(@all_runners, fn runner ->
                         ecto_schema_module = runner.ecto_schema_module()
 
                         """
@@ -128,13 +145,23 @@ defmodule Explorer.Chain.Import do
   """
   @spec all(all_options()) :: all_result()
   def all(options) when is_map(options) do
-    with {:ok, runner_options_pairs} <- validate_options(options),
+    with {:ok, runner_options_pairs} <- validate_options(options, @basic_runners),
          {:ok, valid_runner_option_pairs} <- validate_runner_options_pairs(runner_options_pairs),
          {:ok, runner_to_changes_list} <- runner_to_changes_list(valid_runner_option_pairs),
-         {:ok, data} <- insert_runner_to_changes_list(runner_to_changes_list, options) do
-      Logger.debug("#blocks_importer#: importing all (before broadcast)...")
+         {:ok, data} <- insert_runner_to_changes_list(runner_to_changes_list, options, @basic_stages) do
       Publisher.broadcast(data, Map.get(options, :broadcast, false))
-      {:ok, data}
+
+      with {:ok, other_runner_options_pairs} <- validate_options(options, @other_runners),
+           {:ok, other_valid_runner_option_pairs} <- validate_runner_options_pairs(other_runner_options_pairs),
+           {:ok, other_runner_to_changes_list} <- runner_to_changes_list(other_valid_runner_option_pairs),
+           {:ok, other_data} <- insert_runner_to_changes_list(other_runner_to_changes_list, options, @other_stages) do
+        merged_data =
+          data
+          |> Map.merge(other_data)
+
+        Publisher.broadcast(other_data, Map.get(options, :broadcast, false))
+        {:ok, merged_data}
+      end
     end
   end
 
@@ -190,11 +217,11 @@ defmodule Explorer.Chain.Import do
 
   @global_options ~w(broadcast timeout)a
 
-  defp validate_options(options) when is_map(options) do
+  defp validate_options(options, runners) when is_map(options) do
     local_options = Map.drop(options, @global_options)
 
     {reverse_runner_options_pairs, unknown_options} =
-      Enum.reduce(@runners, {[], local_options}, fn runner, {acc_runner_options_pairs, unknown_options} = acc ->
+      Enum.reduce(runners, {[], local_options}, fn runner, {acc_runner_options_pairs, unknown_options} = acc ->
         option_key = runner.option_key()
 
         case local_options do
@@ -208,7 +235,8 @@ defmodule Explorer.Chain.Import do
 
     case Enum.empty?(unknown_options) do
       true -> {:ok, Enum.reverse(reverse_runner_options_pairs)}
-      false -> {:error, {:unknown_options, unknown_options}}
+      # {:error, {:unknown_options, unknown_options}}
+      false -> {:ok, Enum.reverse(reverse_runner_options_pairs)}
     end
   end
 
@@ -277,14 +305,14 @@ defmodule Explorer.Chain.Import do
     end
   end
 
-  defp runner_to_changes_list_to_multis(runner_to_changes_list, options)
+  defp runner_to_changes_list_to_multis(runner_to_changes_list, options, stages)
        when is_map(runner_to_changes_list) and is_map(options) do
     Logger.debug("#blocks_importer#: runner_to_changes_list_to_multis starting...")
     timestamps = timestamps()
     full_options = Map.put(options, :timestamps, timestamps)
 
     {multis, final_runner_to_changes_list} =
-      Enum.flat_map_reduce(@stages, runner_to_changes_list, fn stage, remaining_runner_to_changes_list ->
+      Enum.flat_map_reduce(stages, runner_to_changes_list, fn stage, remaining_runner_to_changes_list ->
         stage.multis(remaining_runner_to_changes_list, full_options)
       end)
 
@@ -319,12 +347,12 @@ defmodule Explorer.Chain.Import do
     Map.merge(changes, timestamps)
   end
 
-  defp insert_runner_to_changes_list(runner_to_changes_list, options) when is_map(runner_to_changes_list) do
+  defp insert_runner_to_changes_list(runner_to_changes_list, options, stages) when is_map(runner_to_changes_list) do
     Logger.debug("#blocks_importer#: insert_runner_to_changes_list starting...")
 
     inserted_runner_to_changes_list =
       runner_to_changes_list
-      |> runner_to_changes_list_to_multis(options)
+      |> runner_to_changes_list_to_multis(options, stages)
       |> logged_import(options)
 
     Logger.debug("#blocks_importer#: insert_runner_to_changes_list finished")
