@@ -13,8 +13,7 @@ defmodule Explorer.Chain.Import do
   @basic_stages [
     Import.Stage.Addresses,
     Import.Stage.AddressReferencing,
-    Import.Stage.Transactions,
-    Import.Stage.BlockPending
+    Import.Stage.Transactions
   ]
 
   @other_stages [
@@ -22,7 +21,8 @@ defmodule Explorer.Chain.Import do
     Import.Stage.BlockAddressTokenBalances,
     Import.Stage.BlockLogs,
     Import.Stage.BlockTokenTransfers,
-    Import.Stage.BlockFollowing
+    Import.Stage.BlockFollowing,
+    Import.Stage.BlockPending
   ]
 
   @all_stages [
