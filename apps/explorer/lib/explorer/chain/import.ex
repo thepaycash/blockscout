@@ -151,11 +151,10 @@ defmodule Explorer.Chain.Import do
          {:ok, valid_runner_option_pairs} <- validate_runner_options_pairs(runner_options_pairs),
          {:ok, runner_to_changes_list} <- runner_to_changes_list(valid_runner_option_pairs),
          {:ok, data} <- insert_runner_to_changes_list(runner_to_changes_list, options, @basic_stages) do
-      %{blocks: blocks, transactions: transactions, forked_transactions: forked_transactions} =
-        block_data(options, data)
+      %{blocks: blocks, transactions: transactions, fork_transactions: fork_transactions} = block_data(options, data)
 
       update_block_cache(blocks)
-      update_transactions_cache(transactions, forked_transactions)
+      update_transactions_cache(transactions, fork_transactions)
       Publisher.broadcast(data, Map.get(options, :broadcast, false))
 
       with {:ok, other_runner_options_pairs} <- validate_options(options, @other_runners),
@@ -172,37 +171,37 @@ defmodule Explorer.Chain.Import do
     end
   end
 
-  defp block_data(nil, _), do: %{blocks: [], transactions: [], forked_transactions: []}
+  defp block_data(nil, _), do: %{blocks: [], transactions: [], fork_transactions: []}
 
   defp block_data(%{broadcast: :realtime}, %{
-         blocks: blocks
+         blocks: blocks,
+         transactions: transactions,
+         fork_transactions: fork_transactions
        }) do
-    %{blocks: blocks, transactions: [], forked_transactions: []}
+    %{blocks: blocks, transactions: transactions, fork_transactions: fork_transactions}
   end
 
   defp block_data(%{broadcast: :realtime}, %{
          blocks: blocks,
          transactions: transactions
        }) do
-    %{blocks: blocks, transactions: transactions, forked_transactions: []}
+    %{blocks: blocks, transactions: transactions, fork_transactions: []}
   end
 
   defp block_data(%{broadcast: :realtime}, %{
          blocks: blocks,
-         forked_transactions: forked_transactions
+         fork_transactions: fork_transactions
        }) do
-    %{blocks: blocks, transactions: [], forked_transactions: forked_transactions}
+    %{blocks: blocks, transactions: [], fork_transactions: fork_transactions}
   end
 
   defp block_data(%{broadcast: :realtime}, %{
-         blocks: blocks,
-         transactions: transactions,
-         forked_transactions: forked_transactions
+         blocks: blocks
        }) do
-    %{blocks: blocks, transactions: transactions, forked_transactions: forked_transactions}
+    %{blocks: blocks, transactions: [], fork_transactions: []}
   end
 
-  defp block_data(_, _), do: %{blocks: [], transactions: [], forked_transactions: []}
+  defp block_data(_, _), do: %{blocks: [], transactions: [], fork_transactions: []}
 
   defp update_block_cache([]), do: :ok
 
