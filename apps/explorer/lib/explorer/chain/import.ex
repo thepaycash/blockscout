@@ -9,6 +9,8 @@ defmodule Explorer.Chain.Import do
   alias Explorer.Chain.Events.Publisher
   alias Explorer.Chain.Import
   alias Explorer.Repo
+  alias Explorer.Chain.Cache.Blocks, as: BlocksCache
+  alias Explorer.Chain.Cache.{BlockNumber}
 
   @basic_stages [
     Import.Stage.Addresses,
@@ -149,6 +151,8 @@ defmodule Explorer.Chain.Import do
          {:ok, valid_runner_option_pairs} <- validate_runner_options_pairs(runner_options_pairs),
          {:ok, runner_to_changes_list} <- runner_to_changes_list(valid_runner_option_pairs),
          {:ok, data} <- insert_runner_to_changes_list(runner_to_changes_list, options, @basic_stages) do
+      block_numbers = block_numbers(options)
+      update_block_cache(block_numbers)
       Publisher.broadcast(data, Map.get(options, :broadcast, false))
 
       with {:ok, other_runner_options_pairs} <- validate_options(options, @other_runners),
@@ -164,6 +168,33 @@ defmodule Explorer.Chain.Import do
       end
     end
   end
+
+  defp block_numbers(nil), do: :ok
+
+  defp block_numbers(%{broadcast: :realtime, blocks: %{params: params}}) do
+    block_numbers =
+      params
+      |> Enum.map(fn block ->
+        if Map.has_key?(block, :number) do
+          block[:number]
+        end
+      end)
+    end)
+  end
+
+  defp block_numbers(options), do: []
+
+  defp update_block_cache([]), do: :ok
+
+  defp update_block_cache(blocks) when is_list(blocks) do
+    {min_block, max_block} = Enum.min_max_by(blocks, & &1.number)
+
+    BlockNumber.update_all(max_block.number)
+    BlockNumber.update_all(min_block.number)
+    BlocksCache.update(blocks)
+  end
+
+  defp update_block_cache(_), do: :ok
 
   defp runner_to_changes_list(runner_options_pairs) when is_list(runner_options_pairs) do
     Logger.debug("#blocks_importer#: runner_to_changes_list starting...")
