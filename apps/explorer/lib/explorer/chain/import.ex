@@ -11,6 +11,7 @@ defmodule Explorer.Chain.Import do
   alias Explorer.Repo
   alias Explorer.Chain.Cache.Blocks, as: BlocksCache
   alias Explorer.Chain.Cache.{BlockNumber}
+  alias Explorer.Chain.Block
 
   @basic_stages [
     Import.Stage.Addresses,
@@ -152,6 +153,10 @@ defmodule Explorer.Chain.Import do
          {:ok, runner_to_changes_list} <- runner_to_changes_list(valid_runner_option_pairs),
          {:ok, data} <- insert_runner_to_changes_list(runner_to_changes_list, options, @basic_stages) do
       block_numbers = block_numbers(options)
+      Logger.debug(fn -> [
+        "Gimme",
+        inspect(block_numbers)
+        ]end )
       update_block_cache(block_numbers)
       Publisher.broadcast(data, Map.get(options, :broadcast, false))
 
@@ -175,7 +180,7 @@ defmodule Explorer.Chain.Import do
     params
     |> Enum.map(fn block ->
       if Map.has_key?(block, :number) do
-        block[:number]
+        %Block{number: block[:number]}
       end
     end)
   end
