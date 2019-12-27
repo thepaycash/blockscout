@@ -172,17 +172,15 @@ defmodule Explorer.Chain.Import do
   defp block_numbers(nil), do: :ok
 
   defp block_numbers(%{broadcast: :realtime, blocks: %{params: params}}) do
-    block_numbers =
-      params
-      |> Enum.map(fn block ->
-        if Map.has_key?(block, :number) do
-          block[:number]
-        end
-      end)
+    params
+    |> Enum.map(fn block ->
+      if Map.has_key?(block, :number) do
+        block[:number]
+      end
     end)
   end
 
-  defp block_numbers(options), do: []
+  defp block_numbers(_), do: []
 
   defp update_block_cache([]), do: :ok
 
