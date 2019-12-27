@@ -259,20 +259,23 @@ defmodule Explorer.Etherscan.Logs do
   end
 
   defp internal_transaction_query(logs_query, direction, prepared_filter, address_hash) do
-    from(internal_transaction in InternalTransaction.where_nonpending_block(),
-      join: transaction in assoc(internal_transaction, :transaction),
-      join: log in ^logs_query,
-      on: log.transaction_hash == internal_transaction.transaction_hash,
-      where: internal_transaction.block_number >= ^prepared_filter.from_block,
-      where: internal_transaction.block_number <= ^prepared_filter.to_block,
-      select:
-        merge(map(log, ^@log_fields), %{
-          gas_price: transaction.gas_price,
-          gas_used: transaction.gas_used,
-          transaction_index: transaction.index,
-          block_number: transaction.block_number
-        })
-    )
+    query =
+      from(internal_transaction in InternalTransaction.where_nonpending_block(),
+        join: transaction in assoc(internal_transaction, :transaction),
+        join: log in ^logs_query,
+        on: log.transaction_hash == internal_transaction.transaction_hash,
+        where: internal_transaction.block_number >= ^prepared_filter.from_block,
+        where: internal_transaction.block_number <= ^prepared_filter.to_block,
+        select:
+          merge(map(log, ^@log_fields), %{
+            gas_price: transaction.gas_price,
+            gas_used: transaction.gas_used,
+            transaction_index: transaction.index,
+            block_number: transaction.block_number
+          })
+      )
+
+    query
     |> InternalTransaction.where_address_fields_match(address_hash, direction)
     |> InternalTransaction.where_is_different_from_parent_transaction()
   end

@@ -11,7 +11,7 @@ defmodule Indexer.Block.Fetcher do
 
   alias EthereumJSONRPC.{Blocks, FetchedBeneficiaries}
   alias Explorer.Chain.{Address, Block, Hash, Import, Transaction}
-  alias Explorer.Chain.Cache.{Accounts, PendingTransactions, Transactions, Uncles}
+  alias Explorer.Chain.Cache.{Accounts, Uncles}
   alias Indexer.Block.Fetcher.Receipts
 
   alias Indexer.Fetcher.{
@@ -174,7 +174,6 @@ defmodule Indexer.Block.Fetcher do
 
       Logger.debug("#blocks_importer#: Updating cache")
 
-      update_transactions_cache(inserted[:transactions], inserted[:fork_transactions])
       update_addresses_cache(inserted[:addresses])
       update_uncles_cache(inserted[:block_second_degree_relations])
 
@@ -185,12 +184,6 @@ defmodule Indexer.Block.Fetcher do
       {step, {:error, reason}} -> {:error, {step, reason}}
       {:import, {:error, step, failed_value, changes_so_far}} -> {:error, {step, failed_value, changes_so_far}}
     end
-  end
-
-  defp update_transactions_cache(transactions, forked_transactions) do
-    Transactions.update(transactions)
-    PendingTransactions.update_pending(transactions)
-    PendingTransactions.update_pending(forked_transactions)
   end
 
   defp update_addresses_cache(addresses), do: Accounts.drop(addresses)

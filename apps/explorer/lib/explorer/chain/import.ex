@@ -6,11 +6,11 @@ defmodule Explorer.Chain.Import do
   require Logger
 
   alias Ecto.Changeset
+  alias Explorer.Chain.Cache.Blocks, as: BlocksCache
+  alias Explorer.Chain.Cache.{BlockNumber, PendingTransactions, Transactions}
   alias Explorer.Chain.Events.Publisher
   alias Explorer.Chain.Import
   alias Explorer.Repo
-  alias Explorer.Chain.Cache.Blocks, as: BlocksCache
-  alias Explorer.Chain.Cache.{BlockNumber}
 
   @basic_stages [
     Import.Stage.Addresses,
@@ -151,16 +151,11 @@ defmodule Explorer.Chain.Import do
          {:ok, valid_runner_option_pairs} <- validate_runner_options_pairs(runner_options_pairs),
          {:ok, runner_to_changes_list} <- runner_to_changes_list(valid_runner_option_pairs),
          {:ok, data} <- insert_runner_to_changes_list(runner_to_changes_list, options, @basic_stages) do
-      block_numbers = block_numbers(options)
+      %{blocks: blocks, transactions: transactions, forked_transactions: forked_transactions} =
+        block_data(options, data)
 
-      Logger.debug(fn ->
-        [
-          "Gimme",
-          inspect(block_numbers)
-        ]
-      end)
-
-      update_block_cache(block_numbers)
+      update_block_cache(blocks)
+      update_transactions_cache(transactions, forked_transactions)
       Publisher.broadcast(data, Map.get(options, :broadcast, false))
 
       with {:ok, other_runner_options_pairs} <- validate_options(options, @other_runners),
@@ -177,13 +172,37 @@ defmodule Explorer.Chain.Import do
     end
   end
 
-  defp block_numbers(nil), do: :ok
+  defp block_data(nil, _), do: %{blocks: [], transactions: [], forked_transactions: []}
 
-  defp block_numbers(%{broadcast: :realtime, blocks: blocks}) do
-    blocks
+  defp block_data(%{broadcast: :realtime}, %{
+         blocks: blocks
+       }) do
+    %{blocks: blocks, transactions: [], forked_transactions: []}
   end
 
-  defp block_numbers(_), do: []
+  defp block_data(%{broadcast: :realtime}, %{
+         blocks: blocks,
+         transactions: transactions
+       }) do
+    %{blocks: blocks, transactions: transactions, forked_transactions: []}
+  end
+
+  defp block_data(%{broadcast: :realtime}, %{
+         blocks: blocks,
+         forked_transactions: forked_transactions
+       }) do
+    %{blocks: blocks, transactions: [], forked_transactions: forked_transactions}
+  end
+
+  defp block_data(%{broadcast: :realtime}, %{
+         blocks: blocks,
+         transactions: transactions,
+         forked_transactions: forked_transactions
+       }) do
+    %{blocks: blocks, transactions: transactions, forked_transactions: forked_transactions}
+  end
+
+  defp block_data(_, _), do: %{blocks: [], transactions: [], forked_transactions: []}
 
   defp update_block_cache([]), do: :ok
 
@@ -196,6 +215,12 @@ defmodule Explorer.Chain.Import do
   end
 
   defp update_block_cache(_), do: :ok
+
+  defp update_transactions_cache(transactions, forked_transactions) do
+    Transactions.update(transactions)
+    PendingTransactions.update_pending(transactions)
+    PendingTransactions.update_pending(forked_transactions)
+  end
 
   defp runner_to_changes_list(runner_options_pairs) when is_list(runner_options_pairs) do
     Logger.debug("#blocks_importer#: runner_to_changes_list starting...")
