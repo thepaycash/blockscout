@@ -13,7 +13,7 @@ defmodule Indexer.Fetcher.TokenUpdater do
 
   @behaviour BufferedTask
 
-  @max_batch_size 50
+  @max_batch_size 200
   @max_concurrency 4
   @defaults [
     flush_interval: :timer.seconds(3),
