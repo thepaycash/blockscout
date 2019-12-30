@@ -87,9 +87,14 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
         transactions: transactions
       })
     end)
-    |> Multi.run(:acquire_contract_address_tokens, fn repo, _ ->
-      acquire_contract_address_tokens(repo, consensus_block_numbers)
-    end)
+    # It was introduced in 810dc48a2c7f236c7a4ab48e317b4ac26946a2bc (Enforce DB transaction's order between tables to prevent deadlocks)
+    # |> Multi.run(:acquire_contract_address_tokens, fn repo, _ ->
+    #   Logger.debug(fn -> [
+    #     "#blocks_importer#: acquire_contract_address_tokens 1",
+    #     inspect(repo)
+    #   ] end)
+    #   acquire_contract_address_tokens(repo, consensus_block_numbers)
+    # end)
     |> Multi.run(:delete_address_token_balances, fn repo, _ ->
       delete_address_token_balances(repo, consensus_block_numbers, insert_options)
     end)
