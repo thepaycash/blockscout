@@ -121,18 +121,19 @@ defmodule Explorer.Chain.Import.Runner.Blocks do
   @impl Runner
   def timeout, do: @timeout
 
-  defp acquire_contract_address_tokens(repo, consensus_block_numbers) do
-    query =
-      from(address_current_token_balance in Address.CurrentTokenBalance,
-        where: address_current_token_balance.block_number in ^consensus_block_numbers,
-        select: address_current_token_balance.token_contract_address_hash,
-        distinct: address_current_token_balance.token_contract_address_hash
-      )
+  # It was introduced in 810dc48a2c7f236c7a4ab48e317b4ac26946a2bc (Enforce DB transaction's order between tables to prevent deadlocks)
+  # defp acquire_contract_address_tokens(repo, consensus_block_numbers) do
+  #   query =
+  #     from(address_current_token_balance in Address.CurrentTokenBalance,
+  #       where: address_current_token_balance.block_number in ^consensus_block_numbers,
+  #       select: address_current_token_balance.token_contract_address_hash,
+  #       distinct: address_current_token_balance.token_contract_address_hash
+  #     )
 
-    contract_address_hashes = repo.all(query)
+  #   contract_address_hashes = repo.all(query)
 
-    Tokens.acquire_contract_address_tokens(repo, contract_address_hashes)
-  end
+  #   Tokens.acquire_contract_address_tokens(repo, contract_address_hashes)
+  # end
 
   defp fork_transactions(%{
          repo: repo,
