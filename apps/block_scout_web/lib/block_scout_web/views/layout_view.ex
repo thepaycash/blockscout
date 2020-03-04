@@ -11,7 +11,7 @@ defmodule BlockScoutWeb.LayoutView do
       url: "https://thepaycash.github.io/"
     },
     %{
-      title: "Thepay.cash Kanda Testnet",
+      title: "Kanda Testnet",
       url: "https://kanda.thepay.cash",
       test_net?: true
     }
