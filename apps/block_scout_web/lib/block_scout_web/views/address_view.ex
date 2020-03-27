@@ -127,7 +127,9 @@ defmodule BlockScoutWeb.AddressView do
   end
 
   def empty_exchange_rate?(exchange_rate) do
-    TokenExchangeRate.null?(exchange_rate)
+    # DISABLED for thepay.cash network
+    # TokenExchangeRate.null?(exchange_rate)
+    TokenExchangeRate.null
   end
 
   def balance_percentage(%Address{fetched_coin_balance: _} = address) do

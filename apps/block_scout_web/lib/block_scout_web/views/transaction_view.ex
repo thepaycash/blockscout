@@ -175,7 +175,9 @@ defmodule BlockScoutWeb.TransactionView do
   end
 
   def empty_exchange_rate?(exchange_rate) do
-    Token.null?(exchange_rate)
+    # DISABLED for thepay.cash network
+    # Token.null?(exchange_rate)
+    Token.null
   end
 
   def formatted_status(status) do
