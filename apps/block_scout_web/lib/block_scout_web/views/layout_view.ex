@@ -8,7 +8,7 @@ defmodule BlockScoutWeb.LayoutView do
   @default_other_networks [
     %{
       title: "Thepay.cash",
-      url: "https://thepaycash.github.io/"
+      url: "https://thepay.cash/"
     },
     %{
       title: "Kanda Testnet",
